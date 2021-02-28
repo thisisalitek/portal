@@ -1375,7 +1375,7 @@ function runFilter(selector,prefix=''){
 		window.onhashchange()
 	}else{
 		setHashObject(h)
-		window.onhashchange()
+		//window.onhashchange()
 	}
 }
 
@@ -1757,7 +1757,7 @@ function runProgramAjax(data){
 			if(result.success){
 				if(typeof result.data=='string'){
 					if(programType=='file-exporter'){
-						download(`data:application/file;base64,${btoa2(result.data)}`,`export_${(new Date()).yyyymmddhhmmss()}.txt`,'application/file')
+						download(`data:application/file;base64,${btoa2(result.data)}`,`export_${(new Date()).yyyymmddhhmmss()}.csv`,'application/file')
 						return
 					}else if(programType=='connector-exporter'){
 						alertX(result.data,(answer)=>{

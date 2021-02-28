@@ -1027,6 +1027,7 @@
 		"AB-": "AB-"
 	},
 	"programTypes": {
+		"collection-process": "collection-process",
 		"file-importer": "file-importer",
 		"file-exporter": "file-exporter",
 		"connector-importer": "connector-importer",

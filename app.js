@@ -136,23 +136,26 @@ app.use(function(err, req, res, next) {
 
 global.staticValues=require('./resources/staticvalues.json')
 
-var tryCount=0
-function getPortalModules(){
-	if(tryCount>6)
-		return
-	api.get('/portal-modules',null,{view:'list'},(err,resp)=>{
-		if(!err){
-			staticValues['modules']=resp.data
-		}else{
-			tryCount++
-			eventLog(`getting portal modules from API Service. retrying...`,tryCount)
-			setTimeout(getPortalModules,10000)
-			console.error(`err:`,err)
-		}
-	})
-}
+staticValues['modules']=require('./resources/portal-modules.json')
 
-setTimeout(getPortalModules,10000)
+// var tryCount=0
+// function getPortalModules(){
+// 	if(tryCount>6)
+// 		return
+// 	api.get('/portal-modules',null,{view:'list'},(err,resp)=>{
+// 		if(!err){
+// 			staticValues['modules']=resp.data
+// 		}else{
+// 			tryCount++
+// 			eventLog(`getting portal modules from API Service. retrying...`,tryCount)
+// 			setTimeout(getPortalModules,10000)
+// 			console.error(`err:`,err)
+// 		}
+// 	})
+// }
+
+
+// setTimeout(getPortalModules,10000)
 
 
 //============= HTTP SERVER ==================

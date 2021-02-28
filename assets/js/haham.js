@@ -152,7 +152,10 @@
 					if(mainCtrl.tagName=='DIV'){
 						mainCtrl.innerHTML=s
 						loadCardCollapses()
+						
 						$(`#${divId}`).append(`<script type="text/javascript">${script}<\/script>`)
+						console.log('script ekle script.length:',script.length)
+						// console.log(script)
 					}else if(mainCtrl.tagName=='IFRAME'){
 						var iframe = mainCtrl.contentWindow || ( mainCtrl.contentDocument.document || mainCtrl.contentDocument)
 						iframe.document.open()
@@ -780,7 +783,7 @@
 			gridFilterRow_changes(this.item)
 
 			$('.modal-dialog').draggable({handle: '.modal-header'})
-			$(`#${this.item.id}`).append(`<script type="text/javascript">${script}<\/script>`)
+			//$(`#${this.item.id}`).append(`<script type="text/javascript">${script}<\/script>`)
 
 			if(this.item.onchange){
 				var onchange=this.item.onchange
@@ -1646,7 +1649,7 @@ function dateRangeBox(item){
 	<option value="">Tarih</option>
 	<option value="today">Bugün</option>
 	<option value="thisWeek">Bu Hafta</option>
-	<option value="thisMonth" selected>Bu Ay</option>
+	<option value="thisMonth">Bu Ay</option>
 	<option value="last1Week">Son 1 Hafta</option>
 	<option value="last1Month">Son 1 Ay</option>
 	<option value="last3Months">Son 3 Ay</option>
@@ -1659,13 +1662,27 @@ function dateRangeBox(item){
 	</div>`
 
 	script+=`
+	
 	$('#${item.id} #cbDate').on('change',cbDate_onchange)
-
-	if(pageSettings.getItem('cbDate')){
+ 
+ 	if((hashObj.query.cbDate || '')!='' ){
+ 		$('#${item.id} #cbDate').val(hashObj.query.cbDate)
+ 		if(hashObj.query.date1 || ''!=''){
+ 			$('#${item.id} #date1').val(hashObj.query.date1)
+ 		}
+ 		if(hashObj.query.date2 || ''!=''){
+ 			$('#${item.id} #date2').val(hashObj.query.date2)
+ 		}
+ 	}else if(pageSettings.getItem('cbDate')){
 		$('#${item.id} #cbDate').val(pageSettings.getItem('cbDate'))
 		cbDate_onchange()
 	}
 
+	if($('#${item.id} #cbDate').val()==''){
+		$('#${item.id} #cbDate').val('thisMonth')
+	}
+
+	
 	function cbDate_onchange(){
 		var obj=cboEasyDateChange($('#${item.id} #cbDate').val())
 		$('#${item.id} #date1').val(obj.date1)

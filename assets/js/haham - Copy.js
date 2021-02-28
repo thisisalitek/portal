@@ -1753,7 +1753,7 @@ function dateRangeBox(item){
 	script+=`
 	$('#${item.id} #cbDate').on('change',cbDate_onchange)
 
-	if(pageSettings.getItem('cbDate')){
+	if(pageSettings.getItem('cbDate') && $('#${item.id} #cbDate').val()=='' && (hashObj.query.cbDate || '')=='' ){
 		$('#${item.id} #cbDate').val(pageSettings.getItem('cbDate'))
 		cbDate_onchange()
 	}
