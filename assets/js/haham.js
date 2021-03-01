@@ -154,8 +154,7 @@
 						loadCardCollapses()
 						
 						$(`#${divId}`).append(`<script type="text/javascript">${script}<\/script>`)
-						console.log('script ekle script.length:',script.length)
-						// console.log(script)
+
 					}else if(mainCtrl.tagName=='IFRAME'){
 						var iframe = mainCtrl.contentWindow || ( mainCtrl.contentDocument.document || mainCtrl.contentDocument)
 						iframe.document.open()
@@ -741,7 +740,7 @@
 		var gridRefreshCalisiyor=false
 
 		function gridRefresh(){
-			// script=''
+			script=''
 			if(gridRefreshCalisiyor)
 				return
 			gridRefreshCalisiyor=true
@@ -783,7 +782,7 @@
 			gridFilterRow_changes(this.item)
 
 			$('.modal-dialog').draggable({handle: '.modal-header'})
-			//$(`#${this.item.id}`).append(`<script type="text/javascript">${script}<\/script>`)
+			$(`#${this.item.id}`).append(`<script type="text/javascript">${script}<\/script>`)
 
 			if(this.item.onchange){
 				var onchange=this.item.onchange

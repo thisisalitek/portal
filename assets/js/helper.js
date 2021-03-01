@@ -1002,33 +1002,7 @@ function gridSatirDuzenle(rowIndex,tableId,insideOfModal){
 			if(field.visible===false){
 				td.innerHTML=editRow.detail.cells[cellIndex].innerHTML
 				td.classList.add('hidden')
-				// var inputs=editRow.detail.cells[cellIndex].querySelectorAll(`input`)
-				// var i=0
-				// td.innerHTML=''
-				// while(i<inputs.length){
-				// 	if(inputs.length>1){
-				// 		field.field=`${item.field}.${rowIndex}.${key}.${i}`
-				// 	}
-				// 	field.id=generateFormId(field.field)
-				// 	field.name=generateFormName(field.field)
-				// 	field.value=inputs[i].value
-				// 	if(field.type=='boolean'){
-				// 		field.class='grid-checkbox'
-				// 		field.value=field.value.toString()==='true'?true:false
-				// 	}
-
-				// 	field.valueText=editRow.detail.cells[cellIndex].innerText
-
-				// 	var data={value:{}}
-				// 	data.value[field.field]=field.value
-				// 	if(field.lookupTextField){
-				// 		data.value[field.lookupTextField]=field.valueText
-				// 	}
-				// 	data.value=listObjectToObject(data.value)
-
-				// 	td.innerHTML+=frm.generateControls(field,data)
-				// 	i++
-				// }
+				
 
 			}else{
 				if(editRow.detail.cells[cellIndex].querySelector(`input`)){
@@ -1316,8 +1290,6 @@ function refreshRemoteList(remoteList){
 				Object.keys(remoteList[e].list).forEach((key)=>{
 					dizi.forEach((d)=>{
 						if(d.obj._id==key){
-							// $(remoteList[e].list[key].cellId).html(d.value)
-							console.log(`remoteList[e].dataSource.label:`,remoteList[e].dataSource.label)
 							$(remoteList[e].list[key].cellId).html(replaceUrlCurlyBracket((remoteList[e].dataSource.label || '{name}'),d.obj))
 							if(remoteList[e].list[key].lookupTextField){
 
@@ -1953,7 +1925,6 @@ function initIspiyonService(){
 		})
 
 		$('#alertsDropdown').on('hidden.bs.dropdown',()=>{
-			console.log('global.lastNotifications:',global.lastNotifications)
 
 		})
 

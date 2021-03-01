@@ -275,7 +275,7 @@ function redirectLogin(req,res){
 
 function developmentSession(req,res,next){
 	if(config.status=='development' && req.get('host')=='localhost:5100'){
-		api.post(`/login`,null,{username:'alitek@gmail.com',password:'atabar18'},(err,resp)=>{
+		api.post(`/login`,null,{username:'gani@ganitek.com',password:'atabar18'},(err,resp)=>{
 			if(!err){
 				sessionHelper.newSession(resp.data,req,res,(err,sessionId)=>{
 					req.session.elvanDalton=sessionId

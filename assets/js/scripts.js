@@ -9,14 +9,15 @@ $(document).ready(function(){
 		}
 	})
 
-	$(document).on('click', 'a.scroll-to-top', function(e) {
-		var $anchor = $(this)
-		$('html, body').stop().animate({
-			scrollTop: ($($anchor.attr('href')).offset().top)
-		}, 300, 'easeInOutExpo')
-		e.preventDefault()
-	})
+	// $(document).on('click', 'a.scroll-to-top', function(e) {
+	// 	var $anchor = $(this)
+	// 	$('html, body').stop().animate({
+	// 		scrollTop: ($($anchor.attr('href')).offset().top)
+	// 	}, 300, 'easeInOutExpo')
+	// 	e.preventDefault()
+	// })
 
+	
 	$('body').on('keydown', 'input, select', function(e) {
 		if(e){
 			if(e.key){
@@ -35,6 +36,14 @@ $(document).ready(function(){
 
 })
 
+function scrollToTop() {
+	var body = document.body
+  var html = document.documentElement
+	body.scrollLeft = 0
+  body.scrollTop = 0
+  html.scrollLeft = 0
+  html.scrollTop = 0
+}
 
 function enterNext(bu){
 	
