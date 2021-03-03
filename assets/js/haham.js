@@ -587,13 +587,14 @@
 			<!-- ./table -->
 			`
 			if(item.options.show.infoRow){
+				//				<a class="btn btn-success btn-sm" href="javascript:gridCSVExport('${btoa2(JSON.stringify(item))}')" title="CSV indir"><i class="far fa-file-excel"></i><i class="ml-2 fas fa-download"></i></a>
 				s+=`
 				<!-- info row -->
 				<div class="row m-0 border">
 				<div class="col-12 pt-1 px-1">
 				<div class="float-left form-inline m-0 p-0 mt-1 mb-1">
 				<div class="">
-				export buttons qwerty
+				<a class="btn btn-success btn-sm" href="javascript:gridCSVExport('${item.id}')" title="CSV indir"><i class="far fa-file-excel"></i><i class="ml-2 fas fa-download"></i></a>
 				</div>
 				${item.options.show.pageCount?gridPageCount(item,bRoot):''}
 				</div>

@@ -38,11 +38,11 @@ $(document).ready(function(){
 
 function scrollToTop() {
 	var body = document.body
-  var html = document.documentElement
+	var html = document.documentElement
 	body.scrollLeft = 0
-  body.scrollTop = 0
-  html.scrollLeft = 0
-  html.scrollTop = 0
+	body.scrollTop = 0
+	html.scrollLeft = 0
+	html.scrollTop = 0
 }
 
 function enterNext(bu){
@@ -74,3 +74,13 @@ function enterNext(bu){
 	}
 	return false
 }
+
+
+// function documentBodyZoom(percent){
+// 	document.body.style.zoom=`${percent}%`
+// 	localStorage.setItem('document.body.style.zoom',document.body.style.zoom)
+// }
+
+// document.body.style.zoom=localStorage.getItem('document.body.style.zoom') || '100%'
+
+// document.body.style.zoom='80%'

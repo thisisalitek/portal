@@ -1347,7 +1347,89 @@ function runFilter(selector,prefix=''){
 		window.onhashchange()
 	}else{
 		setHashObject(h)
-		//window.onhashchange()
+	}
+}
+
+function gridCSVExport(gridId){
+	
+	var grid=document.querySelector(`#${gridId}`)
+	var thead=document.querySelector(`#${gridId} table thead`)
+	var tbody=document.querySelector(`#${gridId} table tbody`)
+	var item=grid.item
+	var s=``
+	var i=0,j=0
+	while(j<thead.rows[0].cells.length){
+		if(item.options.selection && j==0){
+
+		}else{
+			if(!thead.rows[0].cells[j].classList.contains('hidden')){
+				s+='"' + thead.rows[0].cells[j].innerText + '";'
+			}
+			
+		}
+		
+		j++
+	}
+	
+	s+='\r\n'
+
+	while(i<tbody.rows.length){
+		j=0
+		while(j<tbody.rows[i].cells.length){
+			if(item.options.selection && j==0){
+
+			}else{
+				if(!tbody.rows[i].cells[j].classList.contains('hidden'))
+					s+='"' + tbody.rows[i].cells[j].innerText.replaceAll('\r\n',' ').replaceAll('\n',' ') + '";'
+			}
+			
+			j++
+		}
+		s+='\r\n'
+
+		i++
+	}
+	
+	var blob = new Blob([String.fromCharCode(0xFEFF),s], {type: "text/plain;charset=utf-8", autoBom:true})
+	saveAs(blob, "export.csv")
+	
+
+}
+
+function gridCSVExport111(bAll,itemEncodedString){
+	var item=JSON.parse(atob2(itemEncodedString))
+	if(bAll){
+		alertX('Tumunu csv indir')
+	}else{
+		var list=[]
+		$(".checkSingle").each(function() {
+			if(this.checked){
+				list.push({_id:this.value})
+			}
+		})
+		if(list.length==0)
+			return alertX('Hiç kayıt seçilmemiş')
+
+		var data={list:list}
+		$.ajax({
+			url:url,
+			data:data,
+			type:'POST',
+			dataType: "json",
+			success:function(result){
+				if(result.success){
+					alertX(result.data,()=>{
+						window.onhashchange()
+					})
+					
+				}else{
+					showError(result.error)
+				}
+			},
+			error:function(err){
+				showError(err)
+			}
+		})
 	}
 }
 
@@ -1852,24 +1934,24 @@ function getPageSettings(module){
 }
 
 moment.updateLocale('en', {
-    relativeTime : {
-        future: "in %s",
-        past:   "%s önce",
-        s  : 'birkaç saniye',
-        ss : '%d saniye',
-        m:  "bir dakika",
-        mm: "%d dakika",
-        h:  "bir saat",
-        hh: "%d saat",
-        d:  "bir gün",
-        dd: "%d gün",
-        w:  "bir hafta",
-        ww: "%d hafta",
-        M:  "bir ay",
-        MM: "%d ay",
-        y:  "bir yıl",
-        yy: "%d yıl"
-    }
+	relativeTime : {
+		future: "in %s",
+		past:   "%s önce",
+		s  : 'birkaç saniye',
+		ss : '%d saniye',
+		m:  "bir dakika",
+		mm: "%d dakika",
+		h:  "bir saat",
+		hh: "%d saat",
+		d:  "bir gün",
+		dd: "%d gün",
+		w:  "bir hafta",
+		ww: "%d hafta",
+		M:  "bir ay",
+		MM: "%d ay",
+		y:  "bir yıl",
+		yy: "%d yıl"
+	}
 })
 
 
@@ -1949,15 +2031,15 @@ function notificationItem(id,notifyDate,text,status,icon){
 	}
 	var s=`
 	<a id='${id}' class="notification-dropdown-item dropdown-item d-flex align-items-center" href="#">
-		<div class="mr-3">
-			<div class="icon-circle ${bgClass}">
-				<i class="${icon?icon:'fas fa-bell'} text-white"></i>
-			</div>
-		</div>
-		<div  class="text-truncate" style="max-width:300px" >
-			<div class="small text-gray-500">${moment(notifyDate).fromNow()}</div>
-			<span>${text}</span>
-		</div>
+	<div class="mr-3">
+	<div class="icon-circle ${bgClass}">
+	<i class="${icon?icon:'fas fa-bell'} text-white"></i>
+	</div>
+	</div>
+	<div  class="text-truncate" style="max-width:300px" >
+	<div class="small text-gray-500">${moment(notifyDate).fromNow()}</div>
+	<span>${text}</span>
+	</div>
 	</a>
 	`
 	return s
@@ -1968,7 +2050,7 @@ function notifyMe(text,status) {
 		message: text,
 		status: status || 'orange',
 		dismissible:true,
-		timeout:10000,
+		timeout:3000,
 		// actions: [{
 		// 	text: "Click Me!",
 		// 	function: function(){
