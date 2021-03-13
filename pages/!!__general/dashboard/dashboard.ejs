@@ -1,0 +1,69 @@
+<%layout('../../_common/layouts/general')%>
+<% 
+	title='Ana Sayfa' 
+	icon='fas fa-tachometer-alt'
+
+%>
+
+
+<div class="row">
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-primary text-white mb-4">
+            <div class="card-body">Primary Card</div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a class="small text-white stretched-link" href="#">View Details</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-warning text-white mb-4">
+            <div class="card-body">Warning Card</div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a class="small text-white stretched-link" href="#">View Details</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-success text-white mb-4">
+            <div class="card-body">Success Card</div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a class="small text-white stretched-link" href="#">View Details</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-danger text-white mb-4">
+            <div class="card-body">Danger Card</div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a class="small text-white stretched-link" href="#">View Details</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+</div>
+<a class="btn btn-primary" href="javascript:sayfalariYukle()">Sayfalari yukle</a>
+
+<script type="text/javascript">
+	function sayfalariYukle(){
+		$.ajax({
+			type:'GET',
+			url:'/api/pages',
+			success:function(result){
+				if(result.success){
+					console.log('version:',result.data.version)
+					console.log('pages:',result.data.pages)
+				}else{
+					alertX(`${result.error.code || result.error.name} - ${result.error.message || result.error.name}`,`HATA`,`danger`)
+				}
+			},
+			error:function(err){
+				alertX(`${err.code || err.name} - ${err.message || err.name}`,`HATA`,`danger`)
+			}
+		})
+	}
+</script>
+
+

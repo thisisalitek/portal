@@ -289,13 +289,19 @@ exports.delete=(endpoint,req, callback)=>{
 }
 
 function sessionId2Token(req,cb){
-	if(!req)
+	if(!req){
 		return cb(null,{token:''})
+	}else{
+		if(req.token!=undefined){
+			return cb(null,{token:req.token})
+		}
+	}
 	var elvanDalton=req.session.elvanDalton
 	var mid=req.query!=undefined?req.query.mid || '':req.mid || ''
 
 	if(req.params!=undefined){
-		if(req.params.module=='general' && req.params.page=='login'){
+		//qwerty buraya tekrar gelelim
+		if(req.params.module=='login' || req.params.page=='login'){
 			return cb(null,{token:''})
 		}
 	}

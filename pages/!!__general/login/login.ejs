@@ -1,0 +1,61 @@
+<% layout('../../_common/layouts/login-layout') %>
+<div class="container mb-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-5">
+            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                <div class="card-header"><div class="text-center login-title text-primary"><i class="fas fa-sign-in-alt mr-1"></i> {{Sign In}}</div></div>
+                <div class="card-body">
+                    <%- formError(message) %>
+                    <form action="" method="POST" role="form" name="form1" id="form1" autocomplete="off">
+                        <div class="form-group">
+                            <label class="mb-1" for="username">{{Kullanıcı adı}}</label>
+                            <input class="form-control" id="username"  name="username" type="text" placeholder="{{Kullanıcı adınızı giriniz}}" value="<%=form.username%>" />
+                        </div>
+                        <div class="form-group">
+                            <label class="mb-1" for="password">{{Password}}</label>
+                            <input class="form-control" id="password"  name="password"  type="password" placeholder="{{Parolanızı giriniz}}" value="<%=form.password%>" />
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" id="remember" name="remember" type="checkbox" />
+                                <label class="custom-control-label" for="remember">{{Beni hatırla}}</label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+                            <a class="" href="/general/login/password">{{Parolami unuttum?}}</a>
+                            <input class="btn btn-primary" type="submit" value="{{Giriş}}">
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center">
+                    <div class=""><a href="/general/login/signup">{{Üye ol!}}</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+	
+	function sayfalariYukle(){
+		$.ajax({
+			type:'GET',
+			url:'/api/pages',
+			success:function(result){
+				if(result.success){
+					localStorage.setItem('pages',JSON.stringify(result.data.pages))
+					localStorage.setItem('pages_version',result.data.version)
+					localStorage.setItem('staticValues',JSON.stringify(result.data.staticValues))
+					
+				}else{
+					alertX(`${result.error.code || result.error.name} - ${result.error.message || result.error.name}`,`HATA`,`danger`)
+				}
+			},
+			error:function(err){
+				alertX(`${err.code || err.name} - ${err.message || err.name}`,`HATA`,`danger`)
+			}
+		})
+	}
+	$(document).ready(()=>{
+		sayfalariYukle()
+	})
+</script>

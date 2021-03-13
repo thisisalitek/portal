@@ -17,23 +17,28 @@ module.exports = function(app){
 
 	app.all('/', function(req, res) {
 		if(req.session.elvanDalton){
-			res.redirect(`/general/login/passport`)
+			res.redirect('/haham#/dashboard/main')
 		}else{
-			res.redirect('/general/login')
+
+			res.redirect('/login')
 		}
 		
 	})
 	
 	app.all('/changedb', function(req, res) {
 		if(!req.session.elvanDalton){
-			res.redirect('/general/login')
+			res.redirect('/login')
 		}else{
 			var referer=req.query.r || req.headers.referer
-			sessionHelper.changeDb(req,req.query.db,(err,data)=>{
+			sessionHelper.changeDb(req,req.query.db,(err,sessionDoc)=>{
 				if(!err){
-					
-					// res.redirect(referer)
-					res.redirect(`/general/login/passport?r=${referer}`)
+					getInitializeData(sessionDoc,req,res,(err,data)=>{
+						if(!err){
+							res.render('_common/passport',{data:data})
+						}else{
+							errorPage(req,res,err)
+						}
+					})
 				}else{
 					errorPage(req,res,err)
 				}
@@ -43,29 +48,51 @@ module.exports = function(app){
 
 
 	app.all('/login', function(req, res) {
-		res.redirect(`/general/login?${mrutil.encodeUrl(req.query)}`)
-	})
-	app.all('/logout', function(req, res) {
-		
+		try{
 
+			if(!req.query.auth){
+				var currentUrl=`${req.protocol}://${req.get('host')}${req.originalUrl}`
+				var url=`${config.login.url}?ret=${currentUrl}`
+				res.redirect(url)
+			}else{
+				var auth=JSON.parse(decodeURIComponent(req.query.auth))
+				api.get('/mydbdefines',{token:auth.token},{},(err,resp)=>{
+					if(!err){
+						auth.databases=resp.data
+						sessionHelper.newSession(auth,req,res,(err,sessionDoc)=>{
+							if(!err){
+								getInitializeData(sessionDoc,req,res,(err,data)=>{
+									if(!err){
+										res.render('_common/passport',{data:data})
+									}else{
+										errorPage(req,res,err)
+									}
+								})
+							}else{
+								errorPage(req,res,err)
+							}
+						})
+					}else{
+						errorPage(req,res,err)
+					}
+				})
+				
+			}
+		}catch(tryErr){
+			errorPage(req,res,tryErr)
+		}
+		
+	})
+
+	app.all('/logout', function(req, res) {
 		if((req.session.elvanDalton || '')==''){
-			res.redirect('/general/login')
+			res.redirect('/login')
 		}else{
 			sessionHelper.logout(req,res,(err,data)=>{
-				res.redirect('/general/login')
+				res.redirect('/login')
 			})
 		}
 	})
-
-	// app.all('/general/login', function(req, res) {
-		
-	// 	res.status(200).end('merhaba login')
-	// 	// pageRanderNext(req,res)
-	// })
-
-	// app.all('/general/me', function(req, res) {
-	// 	pageRanderNext(req,res)
-	// })
 
 	app.all('/api/initialize', function(req, res) {
 		getJSONPages(req,res)
@@ -130,33 +157,17 @@ module.exports = function(app){
 		apiDownload(req,res,false)
 	})
 
-	app.all('/haham', userInfo, function(req, res) {
-		hahamRender(req,res)
-	})
-	app.all('/haham/:module', userInfo, function(req, res) {
-		hahamRender(req,res)
-	})
-	app.all('/haham/:module/:page', userInfo, function(req, res) {
-		hahamRender(req,res)
-	})
-	app.all('/haham/:module/:page/:func', userInfo, function(req, res) {
-		hahamRender(req,res)
-	})
-	app.all('/haham/:module/:page/:func/:id', userInfo, function(req, res) {
-		hahamRender(req,res)
-	})
-
-	app.all('/:module/:page', userInfo, function(req, res) {
+	app.all('/:page', userInfo, function(req, res) {
 		pageRander(req,res)
 	})
 
-	app.all('/:module/:page/:func', userInfo, function(req, res) {
+	app.all('/:page/:func', userInfo, function(req, res) {
 		
 		pageRander(req,res)
 	})
 	
 
-	app.all('/:module/:page/:func/:id',userInfo, function(req, res) {
+	app.all('/:page/:func/:id',userInfo, function(req, res) {
 		
 		pageRander(req,res)
 	})
@@ -164,31 +175,29 @@ module.exports = function(app){
 
 }
 
-function hahamRender(req,res){
-	setGeneralParams(req,res,{}, (err,data)=>{
-		if(!err){
-			var hahamJS='../pages/_common/haham.js'
-			
-			
-			require(hahamJS)(req,res,data, (err,data2)=>{
-				if(!err){
-					var hahamEJS=`../pages/_common/haham.ejs`
-					// if(req.query.view=='plain'){
-					// 	hahamEJS=`../pages/_common/haham-plain.ejs`
-					// }
-					res.render(hahamEJS, data,(err,html)=>{
-						if(!err){
-							res.status(200).send(html)
-						}else{
-							errorPage(req,res,err)
-						}
-					})
-				}else{
-					return errorPage(req,res,err)
+
+function getInitializeData(sessionDoc,req,res,cb){
+	maxVersion=''
+	getStaticValues((err,sabitDegerler)=>{
+		if(dberr(err,cb)){
+			getJSONPageLoader(path.join(__dirname,'../forms'),'.json','',(err,holder)=>{
+				if(dberr(err,cb)){
+					var data={
+						version:maxVersion,
+						staticValues:sabitDegerler,
+						pages:holder,
+						menu:sessionDoc.menu,
+						databases:sessionDoc.databases,
+						dbId:sessionDoc.dbId,
+						dbName:sessionDoc.dbName,
+						sessionId:req.session.elvanDalton || '',
+						token:req.session.token || '',
+						ispiyonServiceUrl:config.ispiyonService?config.ispiyonService.url || '':'',
+						settings:sessionDoc.settings || {}
+					}
+					cb(null,data)
 				}
 			})
-		}else{
-			return errorPage(req,res,err)
 		}
 	})
 }
@@ -196,7 +205,7 @@ function hahamRender(req,res){
 function pageRander(req,res){
 	timeReset()
 	
-	require(path.join(__dirname,'../pages',req.params.module,req.params.page,`${req.params.page}.js`))(req,res,(err,data,view)=>{
+	require(path.join(__dirname,'../pages',req.params.page,`${req.params.page}.js`))(req,res,(err,data,view)=>{
 		if(!err){
 			setGeneralParams(req,res,data, (err,data)=>{
 				if(err)
@@ -207,7 +216,7 @@ function pageRander(req,res){
 				if(view){
 					res.render(view, data)
 				}else{
-					var fileName=`${req.params.module}/${req.params.page}/${req.params.func || req.params.page}.ejs`
+					var fileName=`${req.params.page}/${req.params.func || req.params.page}.ejs`
 					if(fs.existsSync(path.join(__dirname,'../pages',fileName))){
 						res.render(fileName, data,(err,html)=>{
 							if(!err){
@@ -231,17 +240,16 @@ function pageRander(req,res){
 }
 
 function IsSpecialPages(req){
-	if(req.params.module=='general' && (req.params.page=='login' || req.params.page=='error' || req.params.page=='dashboard' || req.params.page=='closed-module')){
-		return true
-	}
+	// if(req.params.module=='general' && (req.params.page=='login' || req.params.page=='error' || req.params.page=='dashboard' || req.params.page=='closed-module')){
+	// 	return true
+	// }
 	return false
 }
 
 
 var userInfo = function (req, res, next) {
-	if(req.params.module=='general' && req.params.page=='login')
-		return next()
-
+	// if(req.params.module=='general' && req.params.page=='login')
+	// 	return next()
 	developmentSession(req,res,()=>{
 		if((req.session.elvanDalton || '')!=''){
 			db.sessions.findOne({_id:req.session.elvanDalton},(err,doc)=>{
@@ -254,23 +262,9 @@ var userInfo = function (req, res, next) {
 			})
 		}else{
 			redirectLogin(req,res)
-			
+
 		}
 	})
-}
-
-
-function redirectLogin(req,res){
-	var referer=req.headers.referer || ''
-	var currentUrl=req.protocol + '://' + req.get('host')
-	var r=''
-	if(referer!=''){
-		if(referer.substr(0,currentUrl.length)==currentUrl){
-			r=`?e=timeout&r=${referer.substr(currentUrl.length)}`
-		}
-	}
-
-	res.redirect(`/login${r}`)
 }
 
 function developmentSession(req,res,next){
@@ -292,6 +286,19 @@ function developmentSession(req,res,next){
 	}
 }
 
+function redirectLogin(req,res){
+	var referer=req.headers.referer || ''
+	var currentUrl=req.protocol + '://' + req.get('host')
+	var r=''
+	if(referer!=''){
+		if(referer.substr(0,currentUrl.length)==currentUrl){
+			r=`?r=${referer.substr(currentUrl.length)}`
+		}
+	}
+
+	res.redirect(`/login${r}`)
+}
+
 
 function errorPage(req,res,err){
 	var data={}
@@ -305,7 +312,7 @@ function errorPage(req,res,err){
 			data2=data
 		}
 
-		res.render('general/error/error', data2)
+		res.render('error/error', data2)
 	})
 }
 
@@ -357,47 +364,7 @@ function setGeneralParams(req, res, data, cb){
 
 var maxVersion=''
 
-function getJSONPages(req,res){
-	maxVersion=''
-	sessionHelper.changeDb(req,'',(err,data)=>{
-		if(!err){
-			getStaticValues((err,sabitDegerler)=>{
-				if(!err){
-					getJSONPageLoader(path.join(__dirname,'../forms'),'.json','',(err,holder)=>{
-						if(!err){
 
-							res.status(200).json({
-								success:true,
-								data:{
-									version:maxVersion,
-									staticValues:sabitDegerler,
-									pages:holder,
-									menu:data.menu,
-									databases:data.databases,
-									dbId:data.dbId,
-									dbName:data.dbName,
-									sessionId:req.session.elvanDalton || '',
-									token:req.session.token || '',
-									ispiyonServiceUrl:config.ispiyonService?config.ispiyonService.url || '':'',
-									settings:data.settings || {}
-								}
-							})
-						}else{
-
-							res.status(200).json({success:false,error:err})
-						}
-					})
-				}else{
-					
-					res.status(200).json({success:false,error:err})
-				}
-			})
-		}else{
-			res.status(200).json({success:false,error:err})
-		}
-	})
-
-}
 
 function getStaticValues(callback){
 	var fileName=path.join(__dirname,'../resources/staticvalues.json')
@@ -476,12 +443,7 @@ function getJSONPageLoader(folder,suffix,expression,callback){
 
 		
 	}catch(e){
-		errorLog(
-		         `getJSONPageLoader Error:
-		         folder:${folder} 
-		         suffix:${suffix}
-		         expression:${expression}
-		         `)
+		errorLog(`getJSONPageLoader Error:\r\nfolder:${folder}\r\nsuffix:${suffix}\r\nexpression:${expression}`)
 		callback(e)
 	}
 }

@@ -14,7 +14,7 @@ var schema = mongoose.Schema({
     passive: {type:Boolean, default:false, index:true},
     menu:[],
     databases:[],
-    settings:{},
+    settings:[],
     createdDate: { type: Date,default: Date.now},
     lastOnline:{ type: Date,default: Date.now, index:true}
 });

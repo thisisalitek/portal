@@ -1,0 +1,23 @@
+<% if(typeof elvanDalton!='undefined'){%>
+<%layout('../_common/layouts/general')%>
+<%}else{%>
+<%layout('../_common/layouts/plain')%>
+<%}%>
+<div class="row mt-4">
+	<div class="col-12 text-center">
+		<% if(typeof err!='undefined'){ %>
+		<p><%- (err.code || err.name ) %>:<br><%- err.message%></p>
+		<% } else { %>
+		<center>     
+			<h3>HATA oluştu</h3>
+		</center>     
+		<% } %>
+
+	</div>
+</div>
+
+<div class="row" style="margin-top:100px;">
+	<div class="col-12 text-center">
+		<a href="javascript:history.back(1);" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Geri</a>
+	</div>
+</div>

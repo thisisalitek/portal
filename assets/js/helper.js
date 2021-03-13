@@ -30,40 +30,40 @@ var hashObj=getHashObject()
 
 
 
-function sayfalariTekrarYukle(cb){
-	var sessionId=$('#sessionId').html()
-	$('#sessionId').html('Sayfalar ve degiskener tekrar yukleniyor...')
-	$.ajax({
-		type:'GET',
-		url:'/api/initialize',
-		success:function(result){
-			if(result.success){
-				localStorage.setItem('global',JSON.stringify(result.data || {}))
-				global=Object.assign({},global,result.data)			
+// function sayfalariTekrarYukle(cb){
+// 	var sessionId=$('#sessionId').html()
+// 	$('#sessionId').html('Sayfalar ve degiskener tekrar yukleniyor...')
+// 	$.ajax({
+// 		type:'GET',
+// 		url:'/api/initialize',
+// 		success:function(result){
+// 			if(result.success){
+// 				localStorage.setItem('global',JSON.stringify(result.data || {}))
+// 				global=Object.assign({},global,result.data)			
 				
-				if(document.querySelector('#leftMenu')){
-					document.querySelector('#leftMenu').innerHTML=generateLeftMenu(global.menu)
-				}
-				$('#sessionId').html('Yukleme tamamlandi')
-			}else{
-				showError(result.error)
-			}
-			if(cb)
-				cb()
-			setTimeout(()=>{
-				$('#sessionId').html(sessionId)
-			},500)
-		},
-		error:function(err){
-			showError(err)
-			if(cb)
-				cb()
-			setTimeout(()=>{
-				$('#sessionId').html(sessionId)
-			},500)
-		}
-	})
-}
+// 				if(document.querySelector('#leftMenu')){
+// 					document.querySelector('#leftMenu').innerHTML=generateLeftMenu(global.menu)
+// 				}
+// 				$('#sessionId').html('Yukleme tamamlandi')
+// 			}else{
+// 				showError(result.error)
+// 			}
+// 			if(cb)
+// 				cb()
+// 			setTimeout(()=>{
+// 				$('#sessionId').html(sessionId)
+// 			},500)
+// 		},
+// 		error:function(err){
+// 			showError(err)
+// 			if(cb)
+// 				cb()
+// 			setTimeout(()=>{
+// 				$('#sessionId').html(sessionId)
+// 			},500)
+// 		}
+// 	})
+// }
 
 
 function getHashObject(){

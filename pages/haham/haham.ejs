@@ -1,0 +1,70 @@
+<% layout('../_common/layouts/general') %>
+<div id="mainCtrl"></div>
+
+<script type="text/javascript">
+	var sessionId='<%- elvanDalton || '' %>'
+
+	function sayfaBul(){
+		document.title=hashObj.title + ' - tr216'
+		$('#pageTitle').html(`<i class="${hashObj.icon}"></i> ${hashObj.breadCrumbsHtml}`)
+		var sayfa=getPropertyByKeyPath(global.pages,hashObj.pathKey)
+		if(!sayfa)
+			return null
+		var resp
+		switch(hashObj.func){
+			case 'edit':
+			resp=sayfa.edit || sayfa.form
+			break
+			case 'view':
+			resp=sayfa.view || sayfa.edit || sayfa.form || null
+			break
+			case 'print':
+			resp=sayfa.print || sayfa.edit || sayfa.form || null
+			break
+			case 'addnew':
+			resp=sayfa.addnew || sayfa.form || null
+			break
+
+			case '':
+			case 'index':
+			resp= sayfa.index || null
+			break
+			default:
+			resp=sayfa[hashObj.func] || null
+			break
+		}
+		return resp
+	}
+	
+	function sayfayiAcalim(){
+		if((hashObj.query.mid || '')!=''){
+			$(`#leftMenu a`).removeClass('active')
+			$(`#leftMenu #menu${hashObj.query.mid.replaceAll('.','-')}`).addClass('active')
+		}
+		
+		var sayfa=sayfaBul()
+		if(sayfa){
+
+			frm.build(sayfa,'mainCtrl')
+		}else{
+			$('#mainCtrl').html('sayfa bulunamadi')
+		}
+	}
+	
+	
+	var frm=FormControl.FormControl
+
+	$(document).ready(()=>{
+		viewPlain('mainCtrl')
+		sayfayiAcalim()
+		window.onhashchange=()=>{
+			hashObj=getHashObject()
+			viewPlain('mainCtrl')
+
+			$('#mainCtrl').html('loading...')
+			sayfayiAcalim()
+
+		}
+
+	})
+</script>

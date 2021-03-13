@@ -1,0 +1,64 @@
+<% layout('../../_common/layouts/login-layout') %>
+<div class="container mb-4">
+	<div class="row justify-content-center">
+		<div class="col-lg-5">
+			<div id="loginPanel" class="card shadow-lg border-0 rounded-lg mt-5">
+				<div class="card-header"><div class="text-center login-title text-primary"><i class="fas fa-hourglass-half mr-1"></i> {{Lütfen bekleyiniz}}</div></div>
+				<div class="card-body">
+					{{yükleniyor...}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	
+
+	function sayfalariYukle(cb){
+		$.ajax({
+			type:'GET',
+			url:'/api/initialize',
+			success:function(result){
+				if(result.success){
+					localStorage.setItem('global',JSON.stringify(result.data || {}))
+					global=Object.assign({},global,result.data)		
+					cb(null)
+				}else{
+
+					cb(result.error)
+				}
+			},
+			error:function(err){
+
+				cb(err)
+			}
+		})
+	}
+
+	$(document).ready(()=>{
+		if((localStorage.getItem('global') || '')==''){
+			localStorage.clear()
+		}
+		var referer=window.location.href.split('?r=')[1] || ''
+		sayfalariYukle((err)=>{
+			if(!err){
+				if(referer!=''){
+					window.location.href=referer
+				}else{
+					window.location.href='/haham#/dashboard/main'
+				}
+				
+			}else{
+				
+				$('#loginPanel .card-body').html(`HATA:<br>${err.code || err.name} - ${err.message || err.name}`)
+				if((err.code || err.name)=='SESSION_NOT_FOUND'){
+					setTimeout(()=>{
+						window.location.href=`/general/login${referer?'?r='+referer:''}`
+					},2000)
+				}
+				
+			}
+		})
+	})
+</script>
