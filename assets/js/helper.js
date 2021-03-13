@@ -1389,49 +1389,14 @@ function gridCSVExport(gridId){
 
 		i++
 	}
-	
+	var fileName=(document.title || '').split('-')[0].trim() + '.csv'
+
 	var blob = new Blob([String.fromCharCode(0xFEFF),s], {type: "text/plain;charset=utf-8", autoBom:true})
-	saveAs(blob, "export.csv")
+	saveAs(blob, fileName)
 	
 
 }
 
-function gridCSVExport111(bAll,itemEncodedString){
-	var item=JSON.parse(atob2(itemEncodedString))
-	if(bAll){
-		alertX('Tumunu csv indir')
-	}else{
-		var list=[]
-		$(".checkSingle").each(function() {
-			if(this.checked){
-				list.push({_id:this.value})
-			}
-		})
-		if(list.length==0)
-			return alertX('Hiç kayıt seçilmemiş')
-
-		var data={list:list}
-		$.ajax({
-			url:url,
-			data:data,
-			type:'POST',
-			dataType: "json",
-			success:function(result){
-				if(result.success){
-					alertX(result.data,()=>{
-						window.onhashchange()
-					})
-					
-				}else{
-					showError(result.error)
-				}
-			},
-			error:function(err){
-				showError(err)
-			}
-		})
-	}
-}
 
 function menuLink(path,filter){
 	var s=`#${path}`
@@ -1982,7 +1947,7 @@ function initIspiyonService(){
 			message: (text || '').substr(0,500),
 			status: status || 'orange',
 			dismissible:true,
-			timeout:false
+			timeout:3000
 		})
 	})
 	socket.on('message', data => {

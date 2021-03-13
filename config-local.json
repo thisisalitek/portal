@@ -2,25 +2,23 @@
 	"httpserver":{
 		"port" : 5100
 	},
+	"mongodb": {
+		"address":"mongodb://localhost:27017/portalweb"
+	},
 	"api": {
 		"url" : "http://localhost:3500/api/v1"
 	},
-	"mongodb": {
-		"address" : "mongodb://localhost:27017/portalweb"
+	"login": {
+		"url" : "http://localhost:5100/login"
 	},
 	"pagination":{
 		"pageSize":10
-	},
-	"customize":{
-		"logo" : "/img/plaset-web-logo.png",
-		"icon" : "/img/plaset-icon-256x256.png",
-		"brand_name" : "Plaset MRP",
-		"styles" : "/css/custom.css"
 	},
 	"ispiyonService":{
 		"url":"http://localhost:3900",
 		"enabled":true
 	},
 	"tmpDir":"C:\\arge\\tr216\\temp",
-	"status":"development"
+	"status":"development",
+	"status111":"release"
 }

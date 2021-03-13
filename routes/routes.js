@@ -383,10 +383,12 @@ function getJSONPages(req,res){
 								}
 							})
 						}else{
+
 							res.status(200).json({success:false,error:err})
 						}
 					})
 				}else{
+					
 					res.status(200).json({success:false,error:err})
 				}
 			})
@@ -410,6 +412,7 @@ function getStaticValues(callback){
 			stValues['modules']=resp.data
 			callback(null,stValues)
 		}else{
+			console.error(`getStaticValues portal-modules error:`,err)
 			callback(err)
 		}
 	})

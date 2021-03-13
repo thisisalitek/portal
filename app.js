@@ -18,7 +18,7 @@ global.path = require('path')
 global.fs = require('fs')
 global.moment = require('moment')
 
-global.uuid = require('node-uuid')
+global.uuid = require('uuid')
 // global.ejs = require('./assets/vendor/js/ejs.js')
 global.ejs = require('ejs')
 

@@ -6,7 +6,10 @@
 		"address":"mongodb://localhost:27017/portalweb"
 	},
 	"api": {
-		"url":"https://api.tr216.com/api/v1"
+		"url" : "http://localhost:3500/api/v1"
+	},
+	"login": {
+		"url" : "http://localhost:5100/login"
 	},
 	"pagination":{
 		"pageSize":10
@@ -15,5 +18,7 @@
 		"url":"http://localhost:3900",
 		"enabled":true
 	},
+	"tmpDir":"C:\\arge\\tr216\\temp",
+	"status11":"development",
 	"status":"release"
 }
