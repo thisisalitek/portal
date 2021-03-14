@@ -2,7 +2,7 @@ log/
 downloads/
 config.json
 config_local.json
-private*
+*private*
 *.bat
 apidoc.json
 nodemon.json

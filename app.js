@@ -35,6 +35,11 @@ if(process.argv.length>=3){
 	global.config = require('./config-test.json')
 }
 
+// if(fs.existsSync('./private.json')){
+// 	var privateCfg=require('./private.json')
+// 	global.config=Object.assign({},global.config,privateCfg)
+// 	console.log(`config:`,config)
+// }
 
 
 

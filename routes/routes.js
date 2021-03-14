@@ -49,6 +49,9 @@ module.exports = function(app){
 
 	app.all('/login', function(req, res) {
 		try{
+			// if(req.session.elvanDalton){
+			// 	// res.redirect('/haham#dashboard/main')
+			// }else 
 
 			if(!req.query.auth){
 				var currentUrl=`${req.protocol}://${req.get('host')}${req.originalUrl}`
@@ -248,10 +251,9 @@ function IsSpecialPages(req){
 
 
 var userInfo = function (req, res, next) {
-	// if(req.params.module=='general' && req.params.page=='login')
-	// 	return next()
-	developmentSession(req,res,()=>{
-		if((req.session.elvanDalton || '')!=''){
+	
+		if(req.params.page=='haham'){
+			if((req.session.elvanDalton || '')!=''){
 			db.sessions.findOne({_id:req.session.elvanDalton},(err,doc)=>{
 				if(!err){
 					if(doc!=null){
@@ -264,18 +266,16 @@ var userInfo = function (req, res, next) {
 			redirectLogin(req,res)
 
 		}
-	})
+	}else{
+		return next()
+	}
 }
 
 function developmentSession(req,res,next){
-	if(config.status=='development' && req.get('host')=='localhost:5100'){
-		api.post(`/login`,null,{username:'gani@ganitek.com',password:'atabar18'},(err,resp)=>{
+	if(config.status=='development' && req.get('host')=='localhost:5100' && config.login && !req.query.auth){
+		api.post(`/login`,null,{username:config.login.username || '',password:config.login.password || ''},(err,resp)=>{
 			if(!err){
-				sessionHelper.newSession(resp.data,req,res,(err,sessionId)=>{
-					req.session.elvanDalton=sessionId
-					
-					next()
-				})
+				res.redirect(`/login?auth=${encodeURIComponent2(JSON.stringify(resp.data))}`)
 			}else{
 				console.error(err)
 				next()
