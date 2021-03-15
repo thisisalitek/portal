@@ -60,6 +60,11 @@ module.exports = function(app){
 
 			if(!req.query.auth){
 				var currentUrl=`${req.protocol}://${req.get('host')}${req.originalUrl}`
+				if(config.status=='release'){
+					currentUrl=`http://portal.ganygo.com${req.originalUrl}`
+				}
+				
+				console.log(`currentUrl:`,currentUrl)
 				var url=`${config.login.url}?ret=${currentUrl}`
 				res.redirect(url)
 			}else{
