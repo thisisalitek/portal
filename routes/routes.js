@@ -25,6 +25,11 @@ module.exports = function(app){
 		
 	})
 	
+	app.all('/general/login', function(req, res) {
+		res.redirect('/login')
+		
+	})
+
 	app.all('/changedb', function(req, res) {
 		if(!req.session.elvanDalton){
 			res.redirect('/login')
