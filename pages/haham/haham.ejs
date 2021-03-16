@@ -2,10 +2,10 @@
 <div id="mainCtrl"></div>
 
 <script type="text/javascript">
-	var sessionId='<%- elvanDalton || '' %>'
+	
 
 	function sayfaBul(){
-		document.title=hashObj.title + ' - tr216'
+		document.title=hashObj.title + ' - ganygo'
 		$('#pageTitle').html(`<i class="${hashObj.icon}"></i> ${hashObj.breadCrumbsHtml}`)
 		var sayfa=getPropertyByKeyPath(global.pages,hashObj.pathKey)
 		if(!sayfa)

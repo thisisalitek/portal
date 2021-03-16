@@ -4,7 +4,7 @@
 		{
 			"text":"Ayarlari yeniden yukle",
 			"type":"button",
-			"href":"/general/login/passport",
+			"href":"/changedb",
 			"class":"btn btn-primary",
 			"icon":"fas fa-sync-alt",
 			"noGroup":true
