@@ -164,17 +164,16 @@
 					}
 
 
-
-
 				}else{
 					s+=`Hata:${err.code || err.name || ''} - ${err.message || err.name || ''}</div></form>`
 					mainCtrl.innerHTML=s
 					if(err.code=='SESSION_NOT_FOUND'){
-						confirmX(`Oturum sonlandırılmış. Tekrar giriş yapalım mı?`,(answer)=>{
-							if(answer){
-								window.location.href=`/login?r=${window.location.href}`
-							}
-						})
+						window.location.href=`/changedb?sid=${global.sessionId}&r=${window.location.href}`
+						// confirmX(`Oturum sonlandırılmış. Tekrar giriş yapalım mı?`,(answer)=>{
+						// 	if(answer){
+						// 		window.location.href=`/login?r=${window.location.href}`
+						// 	}
+						// })
 					}
 				}
 				script=''
@@ -297,7 +296,8 @@
 			break
 			case 'html' :
 			item.value=getPropertyByKeyPath(data.value,item.field) || item.value || ''
-			s+=item.value
+			s+=formHtml(item)
+			
 			break
 			case 'label' :
 			item.value=getPropertyByKeyPath(data.value,item.field) || item.value || ''
@@ -891,6 +891,7 @@
 								td=replaceUrlCurlyBracket(field.html,o) || ''
 							}
 							break
+
 							case 'number':
 							tdClass=field.class || 'text-right mr-1'
 							td=itemValue
@@ -1401,6 +1402,19 @@ function group(input,item){
 		${input}
 		</div>`
 	}
+}
+
+function formHtml(item){
+	var html=''
+	if(item.html){
+		html=replaceUrlCurlyBracket(item.html, item) || ''
+	}else{
+		html=item.value
+	}
+	
+	var s= group(html,item)
+	
+	return s
 }
 
 function label(item){

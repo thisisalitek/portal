@@ -31,6 +31,9 @@ module.exports = function(app){
 	})
 
 	app.all('/changedb', function(req, res) {
+		if(req.query.sid){
+			req.session.elvanDalton=req.query.sid
+		}
 		if(!req.session.elvanDalton){
 			res.redirect('/login')
 		}else{
@@ -64,7 +67,6 @@ module.exports = function(app){
 					currentUrl=`http://portal.ganygo.com${req.originalUrl}`
 				}
 				
-				console.log(`currentUrl:`,currentUrl)
 				var url=`${config.login.url}?ret=${currentUrl}`
 				res.redirect(url)
 			}else{
@@ -203,8 +205,8 @@ function getInitializeData(sessionDoc,req,res,cb){
 						databases:sessionDoc.databases,
 						dbId:sessionDoc.dbId,
 						dbName:sessionDoc.dbName,
-						sessionId:req.session.elvanDalton || '',
-						token:req.session.token || '',
+						sessionId:sessionDoc._id || '',
+						token:sessionDoc.token || '',
 						ispiyonServiceUrl:config.ispiyonService?config.ispiyonService.url || '':'',
 						settings:sessionDoc.settings || {}
 					}

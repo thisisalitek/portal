@@ -42,18 +42,20 @@
 		localStorage.clear()
 	}
 
+	
+
 	if(data.token){
 		localStorage.setItem('global',JSON.stringify(data || {}))
-		var referer=window.location.href.split('?r=')[1] || ''
+
 		// setTimeout(()=>{
-			if(referer!=''){
-				window.location.href=referer
-			}else{
+			var q=getAllUrlParams()
+			// if(q.r || q.ret || q.returnUrl){
+			// 	window.location.href=q.r || q.ret || q.returnUrl
+			// }else{
 				window.location.href='/haham#/dashboard/main'
-			}
+			// }
 		// },3000)
 	}
-	
 	
 
 </script>

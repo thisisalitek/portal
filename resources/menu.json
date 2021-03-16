@@ -121,7 +121,8 @@
 					{"module":"settings.workingParams.general", "text":"Genel",  "path":"/settings/params-general", "icon":"fas fa-sliders-h"},
 					{"module":"settings.workingParams.private", "text":"Size Özel", "path":"/general/closed-module", "icon":"fas fa-user-cog"}
 				]
-			}
+			},
+			{"text":"Veri Ambarları",	"path":"/settings/databases",	"icon":"fas fa-database"}
 		]
 	},
 	{"text":"System", "icon":"fas fa-shield-alt",

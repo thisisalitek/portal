@@ -587,8 +587,17 @@ function getPropertyByKeyPath(targetObj, keyPath) {
 }
 
 function getFormData(divId){
-
 	var obj=listObjectToObject($(`${divId}`).serializeArray().reduce((obj, item) => ({ ...obj, ...{ [item.name.replaceAll('[','.').replaceAll(']','')]: item.value } }), {}))
+	$(`${divId} input[type=checkbox]`).each(function(){
+		if(this.name){
+			var key=this.name
+			key=key.replaceAll('[','').replaceAll(']','.')
+			if(key.substr(-1)=='.'){
+				key=key.substr(0,key.length-1)
+			}
+			obj[key] = this.checked
+		}
+  })
 	return obj
 }
 
@@ -1042,11 +1051,14 @@ function gridSatirOK(tableId,rowId,rowIndex,insideOfModal){
 	var table=document.getElementById(tableId)
 	var satirObj=getDivData(`#${tableId} #${rowId}`,`${table.item.parentField}.${rowIndex}`)
 	var item=clone(table.item)
+
 	if(rowIndex>-1){
-		item.value[rowIndex]=satirObj
+		
+		item.value[rowIndex]=Object.assign({},item.value[rowIndex],satirObj)
 	}else{
 		item.value.push(satirObj)
 	}
+	console.log(`item:`,item)
 	var frm=FormControl.FormControl
 	$(`#${tableId}`).html(frm.gridHtml(item,false,insideOfModal))
 	frm.script+=`

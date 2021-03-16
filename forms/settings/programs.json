@@ -66,6 +66,7 @@
 							"title":"Local Connector",
 							"collapsed":true,
 							"fields":	{
+								"downloadLink":{"title":"Local Connector Download Link", "type":"html", "col":12, "html":"<br><a href=\"https://github.com/ganygo/localconnector/raw/master/installer/GANYGO_LocalConnector_setup.zip\" title=\"Local Connector indir\" target=\"_blank\"><i class=\"fas fa-download\"></i> Local Connector Win32 Indir</a>"},
 								"connector.connectorId":{"title":"connectorId", "type":"string", "col":4},
 								"connector.connectorPass":{"title":"connectorPass", "type":"string", "col":4},
 								"connector.connectionType":{"title":"Server Connection Type", "type":"lookup","staticValues":"localConnectorConnectionTypes", "col":4, "onchange":"localConnType_Change()"},

@@ -1,0 +1,77 @@
+{
+
+	"index":[
+		{
+			"type": "grid",
+			"fields": {
+				"dbName":{"title":"Veri Ambarı", "type":"string"},
+				"owner.username":{"title":"Sahibi", "type":"string"},
+				"sahibi":{"title":"Ad Soyad", "type":"string" , "html":"{owner.name} {owner.lastName}"},
+				"passive":{"title":"Pasif?", "type":"boolean"}
+			},
+			"options": {
+				"selection": true,
+				"filter": true,
+				"buttons": {
+					"add": true,
+					"edit": true,
+					"delete": true,
+					"view": false,
+					"print": false,
+					"copy": true
+				}
+			},
+			"dataSource": {
+				"type":"remote",
+				"method":"GET",
+				"url":"/api/dbdefine"
+			}
+		}
+	],
+	"form": [
+		{
+			"type":"form",
+			"fields": {
+				"dbName":{"title":"Veri Ambarı Adı", "type":"string","col":8 ,"required":true},
+				"passive":{"title":"Pasif?", "type":"boolean", "col":4},
+				"authorizedMembers" :{
+					"title":"Bu veri ambarına yetkili diğer kullanıcılar", 
+					"type":"grid",
+					"fields": {
+						"memberId" :{"title":"Kullanıcı", "type":"remoteLookup",
+							"dataSource":{
+								"method":"GET",
+								"url":"/api/members",
+								"label":"{username} {name} {lastName}"
+							}
+						},
+						"canRead" :{"title":"Okuyabilir?", "type":"boolean"},
+						"canWrite" :{"title":"Değiştirip/Ekleyebilir?", "type":"boolean"},
+						"canDelete" :{"title":"Silebilir?", "type":"boolean"}
+					},
+					"options": {
+						"selection": false,
+						"filter": false,
+						"confirmBeforeRemove":true,
+						"buttons": {
+							"add": true,
+							"edit": true,
+							"delete": true,
+							"view": false,
+							"print": false,
+							"copy": false
+						}
+					}
+				}
+			},
+			"options": {
+				"mode": "general",
+				"isForm":true
+			},
+			"dataSource": {
+				"method":"GET",
+				"url":"/api/dbdefine"
+			}
+		}
+	]
+}

@@ -54,7 +54,13 @@
 	
 	var frm=FormControl.FormControl
 
+	if(window.location.hash==''){
+		window.location.hash=='/dashboard/main'
+		
+	}
+
 	$(document).ready(()=>{
+		
 		viewPlain('mainCtrl')
 		sayfayiAcalim()
 		window.onhashchange=()=>{
@@ -65,6 +71,5 @@
 			sayfayiAcalim()
 
 		}
-
 	})
 </script>
