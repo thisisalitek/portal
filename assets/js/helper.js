@@ -559,7 +559,6 @@ function replaceUrlCurlyBracket(url,item){
 }
 
 
-
 function getPropertyByKeyPath(targetObj, keyPath) {
 	if(targetObj==undefined || targetObj==null || !keyPath)
 		return targetObj
@@ -1868,6 +1867,7 @@ function viewPlain(divId){
 	$('body').hide()
 	$('#title-panel').hide()
 	$('.sb-topnav').hide()
+	$('.sb-topnav').removeClass('d-flex')
 	$('#layoutSidenav_nav').hide()
 	$('.footer').hide()
 	$('#layoutSidenav_content').css('margin-top','0px')

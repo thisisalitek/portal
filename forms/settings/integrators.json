@@ -74,7 +74,7 @@
 										"party.postalAddress.region.value":{"title":"Bölge", "type":"string"},
 										"party.postalAddress.country.identificationCode.value":{"title":"Ülke Kodu", "type":"lookup", "staticValues":"countryList"},
 										"party.postalAddress.country.name.value":{"title":"Ülke", "type":"string"},
-										"party.postalAddress.postbox.value":{"title":"Posta Kutusu", "type":"string"}
+										"party.postalAddress.postalZone.value":{"title":"Posta Kutusu", "type":"string"}
 									}
 								}
 							}

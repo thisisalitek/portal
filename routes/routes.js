@@ -264,8 +264,8 @@ function IsSpecialPages(req){
 
 var userInfo = function (req, res, next) {
 	
-		if(req.params.page=='haham'){
-			if((req.session.elvanDalton || '')!=''){
+	if(req.params.page=='haham'){
+		if((req.session.elvanDalton || '')!=''){
 			db.sessions.findOne({_id:req.session.elvanDalton},(err,doc)=>{
 				if(!err){
 					if(doc!=null){
