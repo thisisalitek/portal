@@ -61,11 +61,12 @@
 
 	$(document).ready(()=>{
 		
-		viewPlain('mainCtrl')
+
+		anotherViewStyle('mainCtrl')
 		sayfayiAcalim()
 		window.onhashchange=()=>{
 			hashObj=getHashObject()
-			viewPlain('mainCtrl')
+			anotherViewStyle('mainCtrl')
 
 			$('#mainCtrl').html('loading...')
 			sayfayiAcalim()

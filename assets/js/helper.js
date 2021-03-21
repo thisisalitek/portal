@@ -40,7 +40,7 @@ var hashObj=getHashObject()
 // 			if(result.success){
 // 				localStorage.setItem('global',JSON.stringify(result.data || {}))
 // 				global=Object.assign({},global,result.data)			
-				
+
 // 				if(document.querySelector('#leftMenu')){
 // 					document.querySelector('#leftMenu').innerHTML=generateLeftMenu(global.menu)
 // 				}
@@ -341,17 +341,17 @@ function getAjax(url,labelStr='{name}',exceptId='',cb){
 				if(result.data.docs!=undefined){
 					result.data.docs.forEach((e)=>{
 
-						var text=replaceUrlCurlyBracket(labelStr, e,e)
+						var text=replaceUrlCurlyBracket(labelStr, e)
 						dizi.push({label:text,value:text,obj:e})
 					})
 				}else{
 					if(Array.isArray(result.data)){
 						result.data.forEach((e)=>{
-							var text=replaceUrlCurlyBracket(labelStr, e,e)
+							var text=replaceUrlCurlyBracket(labelStr, e)
 							dizi.push({label:text,value:text,obj:e})
 						})
 					}else{
-						var text=replaceUrlCurlyBracket(labelStr, result.data, result.data)
+						var text=replaceUrlCurlyBracket(labelStr, result.data)
 						dizi.push({label:text,value:text,obj:result.data})
 					}
 				}
@@ -551,9 +551,35 @@ function replaceUrlCurlyBracket(url,item){
 		}
 	})
 
+
 	fieldList.forEach((e)=>{
-		url=url.replaceAll(`{${e}}`,getPropertyByKeyPath(item,e))
+		var e2=e.replace('.toLowerCase()','').replace('.toUpperCase()','')
+		var value=getPropertyByKeyPath(item,e2)
+		
+		if(value){
+			if(e.indexOf('.toLowerCase()')>-1){
+				value=value.toLowerCase()
+			}
+			if(e.indexOf('.toUpperCase()')>-1){
+				value=value.toUpperCase()
+			}
+		}
+	
+		url=url.replaceAll(`{${e}}`,value)
 	})
+
+
+	// try{
+	// let s1=url.indexOf('${')
+	// let s2=url.indexOf('}',s1+1)
+	// while(s1>-1 && s2>-1){
+	// 	let evalStr=url.substr(s1+2, s2-(s1+2))
+	// 	let evalVal=eval(evalStr)
+	// 	url=url.substr(0,s1) + evalVal + url.substr(s2+1)
+	// 	s1=url.indexOf('${',s1)
+	// 	s2=url.indexOf('}',s1+1)
+	// }
+	// }catch(tryErr){}
 
 	return url
 }
@@ -596,7 +622,7 @@ function getFormData(divId){
 			}
 			obj[key] = this.checked
 		}
-  })
+	})
 	return obj
 }
 
@@ -1859,10 +1885,33 @@ function pencereyiKapat(){
 	window.close()
 }
 
-function viewPlain(divId){
-	if(hashObj.query.view!='plain'){
-		return
+function anotherViewStyle(divId){
+	switch(hashObj.query.view || ''){
+		case 'print':
+		viewStylePrint(divId)
+		break
+		case 'plain':
+		viewStylePlain(divId)
+		break
 	}
+}
+
+function viewStylePlain(divId){
+
+	$('body').hide()
+	$('#title-panel').hide()
+	$('.sb-topnav').hide()
+	$('.sb-topnav').removeClass('d-flex')
+	$('#layoutSidenav_nav').hide()
+	$('.footer').hide()
+	$('#layoutSidenav_content').css('margin-top','0px')
+	$('#main-container').removeClass('cerceve1')
+	$('#main-container').removeClass('p1')
+
+	$('body').show()
+}
+
+function viewStylePrint(divId){
 
 	$('body').hide()
 	$('#title-panel').hide()
@@ -1886,8 +1935,8 @@ function viewPlain(divId){
 
 	document.getElementById('main-container').appendChild(ifrm)
 	document.getElementById('main-container').innerHTML+=`
-	<div class="row p-0 m-0">
-	<div class="col-12 p-0 m-0">
+	<div class="row m-0 border">
+	<div class="col-12 p-2">
 	<a class="btn btn-primary ml-3 mt-2" href="javascript:frameYazdir('${divId}')"><i class="fas fa-print"></i> Yazdır</a>
 	<a class="btn btn-dark ml-3 mt-2" href="javascript:pencereyiKapat()"><i class="fas fa-times"></i> Kapat</a>
 	</div>

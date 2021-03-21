@@ -224,7 +224,6 @@
 
 		item.insideOfModal=insideOfModal
 
-
 		switch((item.type || '').toLowerCase()){
 			case 'string' :
 			item.value=getPropertyByKeyPath(data.value,item.field) || item.value || ''
@@ -477,7 +476,7 @@
 		if(options.buttons.print[0]==true && options.buttons.print[1]==''){
 				// options.buttons.print[1]=`<a href="javascript:popupCenter('/haham?view=plain#${hashObj.path + '/print/{_id}'}','Yazdır','900','600')" class="btn btn-grid-row btn-info " title="Yazdır"><i class="fas fa-print"></i></a>`
 				var q2=clone(q)
-				q2['view']='plain'
+				q2['view']='print'
 				
 				if(hashObj.settings.print){
 					if(hashObj.settings.print.form){
@@ -868,7 +867,7 @@
 						switch(field.type.toLowerCase()){
 							case 'lookup':
 							var valueText=''
-							var o={}
+							var o=Object.assign({},listItem)
 							Object.keys(field.lookup || {}).forEach((key2)=>{
 								if(key2===itemValue.toString()){
 									td+= field.lookup[key2]
@@ -887,7 +886,10 @@
 								}
 							}
 							if(field.html){
+
 								o[field.field]=itemValue.toString()
+								o['valueText']=valueText
+
 								td=replaceUrlCurlyBracket(field.html,o) || ''
 							}
 							break
@@ -1678,16 +1680,16 @@ function dateRangeBox(item){
 	script+=`
 	
 	$('#${item.id} #cbDate').on('change',cbDate_onchange)
- 
- 	if((hashObj.query.cbDate || '')!='' ){
- 		$('#${item.id} #cbDate').val(hashObj.query.cbDate)
- 		if(hashObj.query.date1 || ''!=''){
- 			$('#${item.id} #date1').val(hashObj.query.date1)
- 		}
- 		if(hashObj.query.date2 || ''!=''){
- 			$('#${item.id} #date2').val(hashObj.query.date2)
- 		}
- 	}else if(pageSettings.getItem('cbDate')){
+
+	if((hashObj.query.cbDate || '')!='' ){
+		$('#${item.id} #cbDate').val(hashObj.query.cbDate)
+		if(hashObj.query.date1 || ''!=''){
+			$('#${item.id} #date1').val(hashObj.query.date1)
+		}
+		if(hashObj.query.date2 || ''!=''){
+			$('#${item.id} #date2').val(hashObj.query.date2)
+		}
+	}else if(pageSettings.getItem('cbDate')){
 		$('#${item.id} #cbDate').val(pageSettings.getItem('cbDate'))
 		cbDate_onchange()
 	}

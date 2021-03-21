@@ -16,8 +16,8 @@
 				"despatchNo"				:{"title":"Irs. No",  "type":"string","html":"<b>{ID}</b><br>{localDocumentId}"},
 				"tarih"	:{"title":"Tarih",  "type":"string","html":"{issueDate}<br><small class=\"text-primary\">{issueTime}</small>"},
 				"musteri"	:{"title":"Müşteri", "type":"string", "filterField":"partyName", "html":"<b>{party.title}</b><br><small class=\"text-primary\">{party.vknTckn}</small> | Satır:{lineCountNumeric}"},
-				"despatchStatus11"	:{"visible":false, "title":"Durum", "type":"lookup", "staticValues":"despatchStatusTypes" , "lookupTextField":"despatchStatusText", "html":"<b>{despatchStatusText}</b>"},
-				"despatchStatus"	:{"title":"Durum", "type":"lookup", "staticValues":"despatchStatusTypes"},
+				"despatchStatus"	:{"title":"Durum", "type":"lookup", "staticValues":"despatchStatusTypes","html":"<a class=\"badge-status status-{despatchStatus.toLowerCase()} \" href=\"javascript:popupCenter('#/despatch/outbox/status/{_id}?view=plain','İşlem Durumları','900','600')\">{valueText}</a>"},
+				"localStatus"	:{"title":"İşlem", "type":"html", "html":"<a class=\"badge-status status-{localStatus} \" href=\"javascript:popupCenter('#/despatch/outbox/status/{_id}?view=plain','İşlem Durumları','900','600')\">{localStatus}</a>"},
 				"receiptAdvice.receiptStatus"	:{"title":"Teslim Durumu", "type":"lookup", "staticValues":"receiptStatusTypes"}
 			},
 			"options": {
@@ -294,6 +294,41 @@
 		"dataSource": {
 			"method":"GET",
 			"url":"/dbapi/despatch/print"
+		}
+	}
+],
+"status": [
+	{
+		"type":"form",
+		"fields":{
+			"despatchStatus" :{"title":"Belge Durumu","type":"string","readonly":true},
+			"despatchErrors":{
+				"type":"grid",
+				"title":"Hatalar",
+				"fields":{
+					"_date":{"title":"Tarih Saat", "type":"datetime"},
+					"code":{"title":"Kod", "type":"string"},
+					"message":{"title":"Açıklama", "type":"string"}
+				}
+			},
+			"islem":{"title":"İşlem","type":"group","collapsed":true,
+				"fields":{
+					"localStatus" :{"title":"İşlem Durum","type":"string","readonly":true},
+					"localErrors":{
+						"type":"grid",
+						"title":"İşlem Hataları",
+						"fields":{
+							"_date":{"title":"Tarih Saat", "type":"datetime"},
+							"code":{"title":"Kod", "type":"string"},
+							"message":{"title":"Açıklama", "type":"string"}
+						}
+					}
+				}
+			}
+		},
+		"dataSource": {
+			"method":"GET",
+			"url":"/dbapi/despatch"
 		}
 	}
 ]
