@@ -7,6 +7,7 @@
 				"dbName":{"title":"Veri Ambarı", "type":"string"},
 				"owner.username":{"title":"Sahibi", "type":"string"},
 				"sahibi":{"title":"Ad Soyad", "type":"string" , "html":"{owner.name} {owner.lastName}"},
+				"stats.dataSize":{"title":"dataSize(bytes)", "type":"number"},
 				"passive":{"title":"Pasif?", "type":"boolean"}
 			},
 			"options": {

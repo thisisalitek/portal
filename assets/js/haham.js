@@ -896,7 +896,7 @@
 
 							case 'number':
 							tdClass=field.class || 'text-right mr-1'
-							td=itemValue
+							td=Number(itemValue).formatQuantity()
 							break
 
 							case 'money':
