@@ -53,21 +53,21 @@
 					"title":"Adres",
 					"collapsed":true,
 					"fields":{
+						"postalAddress.citySubdivisionName.value":{"title":"Mahalle/Semt", "type":"string", 	"col":3},
 						"postalAddress.streetName.value"				:{"title":"Cadde/Sokak", "type":"string", 	"col":6},
 						"postalAddress.buildingNumber.value"		:{"title":"Cadde Sokak Kapı No", "type":"string", 	"col":3},
 						"postalAddress.buildingName.value"			:{"title":"Bina/Site adı", "type":"string", 	"col":3},
 						"postalAddress.blockName.value"					:{"title":"Blok adı", "type":"string", 	"col":3},
 						"postalAddress.room.value"							:{"title":"Daire", "type":"string", 	"col":3},
-						"postalAddress.citySubdivisionName.value":{"title":"Mahalle/Semt", "type":"string", 	"col":3},
 						"postalAddress.district.value"					:{"title":"İlçe", "type":"string", 	"col":3},
 						"postalAddress.cityName.value"					:{"title":"Şehir", "type":"string", 	"col":3},
 						"postalAddress.region.value"						:{"title":"Bölge", "type":"string", 	"col":3},
 						"postalAddress.country.identificationCode.value":{
 							"title":"Ülke", "type":"lookup", "staticValues":"countryList","col":3,
-							"lookupTextField":"postalAddress.country.name.value",
 							"onchange":"countryCode_changed('')"
 						},
-						"postalAddress.postbox.value"						:{"title":"Posta Kutusu", "type":"string", 	"col":3},
+						"postalAddress.country.name.value":{"title":"Ülke İsmi", "type":"string","col":3 ,"readonly":true},
+						"postalAddress.postalZone.value"						:{"title":"Posta Kodu", "type":"string", 	"col":3},
 						"websiteURI.value"											:{"title":"Web sitesi", "type":"string", 	"col":3}
 					}
 				},

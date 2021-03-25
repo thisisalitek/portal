@@ -616,7 +616,7 @@
 		function filterFormButton(divId){
 			var s=`
 			<div class="ml-auto col text-right" style="padding-top: 1.2rem !important;">
-			<a href="javascript:runFilter('#${divId}')" class="btn btn-primary" title="Filtrele" ><i class="fas fa-filter"></i></a>
+			<a href="javascript:runFilter('#${divId}')" class="btn btn-primary" title="Filtrele" ><i class="fas fa-sync-alt"><i class="fas fa-filter  ml-2"></i> </i></a>
 			</div>
 			`
 
@@ -843,6 +843,7 @@
 						var field=fields[key]
 						field.field=key
 						
+						field.class=replaceUrlCurlyBracket(field.class,listItem)
 						var td=''
 						var tdClass=`${field.class || 'ml-1'} `
 						var itemValue=''
@@ -968,6 +969,15 @@
 								td+=`<div class="${cellId}">${itemValue?'<span class="text-danger bold">(bulunamadı)</span>':''}</div>`
 							}
 							break
+							// case 'link':
+							// case 'badge':
+
+							// td=`<span class="${tdClass}>`
+							// if(field.href){
+							// 	td+=`<a href="${replaceUrlCurlyBracket(field.href,listItem)}"></a>`
+							// }
+							// td+=`</span>`
+							// break
 							default:
 							td=itemValue
 							break

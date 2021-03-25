@@ -16,9 +16,9 @@
 				"despatchNo"				:{"title":"Irs. No",  "type":"string","html":"<b>{ID}</b><br>{localDocumentId}"},
 				"tarih"	:{"title":"Tarih",  "type":"string","html":"{issueDate}<br><small class=\"text-primary\">{issueTime}</small>"},
 				"musteri"	:{"title":"Müşteri", "type":"string", "filterField":"partyName", "html":"<b>{party.title}</b><br><small class=\"text-primary\">{party.vknTckn}</small> | Satır:{lineCountNumeric}"},
-				"despatchStatus"	:{"title":"Durum", "type":"lookup", "staticValues":"despatchStatusTypes","html":"<a class=\"badge-status status-{despatchStatus.toLowerCase()} \" href=\"javascript:popupCenter('#/despatch/outbox/status/{_id}?view=plain','İşlem Durumları','900','600')\">{valueText}</a>"},
-				"localStatus"	:{"title":"İşlem", "type":"html", "html":"<a class=\"badge-status status-{localStatus} \" href=\"javascript:popupCenter('#/despatch/outbox/status/{_id}?view=plain','İşlem Durumları','900','600')\">{localStatus}</a>"},
-				"receiptAdvice.receiptStatus"	:{"title":"Teslim Durumu", "type":"lookup", "staticValues":"receiptStatusTypes"}
+				"despatchStatus"	:{"title":"GİB Status", "type":"lookup", "staticValues":"despatchStatusTypes","html":"<span class=\"badge badge-status status-{despatchStatus.toLowerCase()} \"><a href=\"javascript:popupCenter('#/despatch/outbox/status/{_id}?view=plain','Log Kayıtları','900','600')\">{valueText}</a></span>"},
+				"localStatus"	:{"title":"İşlem", "type":"lookup", "staticValues":"localStatusTypes","html":"<span class=\"badge badge-status status-{localStatus.toLowerCase()} \"><a href=\"javascript:popupCenter('#/despatch/outbox/status/{_id}?view=plain','Log Kayıtları','900','600')\">{valueText}</a></span>"},
+				"receiptAdvice.receiptStatus"	:{"title":"Teslim", "type":"lookup", "staticValues":"receiptStatusTypes"}
 			},
 			"options": {
 				"selection": true,
@@ -121,21 +121,21 @@
 							"title":"Adres bilgisi",
 							"collapsed":true,
 							"fields":{
-								"deliveryCustomerParty.party.postalAddress.streetName.value":{"title":"Cadde/Sokak", "type":"string", "col":4},
+								"deliveryCustomerParty.party.postalAddress.citySubdivisionName.value":{"title":"Mahalle/Semt", "type":"string", "required":true,"col":3},
+								"deliveryCustomerParty.party.postalAddress.streetName.value":{"title":"Cadde/Sokak", "type":"string", "required":true, "col":4},
 								"deliveryCustomerParty.party.postalAddress.buildingNumber.value":{"title":"Cadde Sokak Kapı No", "type":"string", "col":2},
 								"deliveryCustomerParty.party.postalAddress.buildingName.value":{"title":"Bina/Site adı", "type":"string", "col":2},
 								"deliveryCustomerParty.party.postalAddress.blockName.value":{"title":"Blok adı", "type":"string", "col":2},
 								"deliveryCustomerParty.party.postalAddress.room.value":{"title":"Daire", "type":"string", "col":2},
-								"deliveryCustomerParty.party.postalAddress.citySubdivisionName.value":{"title":"Mahalle/Semt", "type":"string","col":3},
-								"deliveryCustomerParty.party.postalAddress.district.value":{"title":"İlçe", "type":"string","col":3},
-								"deliveryCustomerParty.party.postalAddress.cityName.value":{"title":"Şehir", "type":"string","col":3},
+								"deliveryCustomerParty.party.postalAddress.district.value":{"title":"İlçe", "type":"string","required":true,"col":3},
+								"deliveryCustomerParty.party.postalAddress.cityName.value":{"title":"Şehir", "type":"string", "required":true,"col":3},
 								"deliveryCustomerParty.party.postalAddress.region.value":{"title":"Bölge", "type":"string","col":3},
 								"deliveryCustomerParty.party.postalAddress.country.identificationCode.value":{
-									"title":"Ülke Kodu", "type":"lookup", "staticValues":"countryList","col":2,
+									"title":"Ülke Kodu", "type":"lookup", "staticValues":"countryList","col":2, "required":true,
 									"onchange":"countryCode_changed('deliveryCustomerParty.party.')"
 								},
-								"deliveryCustomerParty.party.postalAddress.country.name.value":{"title":"Ülke İsmi", "type":"string","col":2 ,"readonly":true},
-								"deliveryCustomerParty.party.postalAddress.postalZone.value":{"title":"Posta Kodu", "type":"string","col":2}
+								"deliveryCustomerParty.party.postalAddress.country.name.value":{"title":"Ülke İsmi", "type":"string","col":2 , "required":true,"readonly":true},
+								"deliveryCustomerParty.party.postalAddress.postalZone.value":{"title":"Posta Kodu", "type":"string", "required":true,"col":2}
 							}
 						},
 						"iletisim":{

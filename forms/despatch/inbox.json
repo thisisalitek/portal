@@ -16,9 +16,9 @@
 				"despatchNo"				:{"title":"Irs. No",  "type":"string","html":"<b>{ID}</b><br>{localDocumentId}"},
 				"tarih"	:{"title":"Tarih",  "type":"string","html":"{issueDate}<br><small class=\"text-primary\">{issueTime}</small>"},
 				"musteri"	:{"title":"Müşteri", "type":"string", "filterField":"partyName", "html":"<b>{party.title}</b><br><small class=\"text-primary\">{party.vknTckn}</small> | Satır:{lineCountNumeric}"},
-				"despatchStatus"	:{"title":"Durum", "type":"lookup", "staticValues":"despatchStatusTypes","html":"<a class=\"badge-status status-{despatchStatus.toLowerCase()} \" href=\"javascript:popupCenter('#/despatch/outbox/status/{_id}?view=plain','İşlem Durumları','900','600')\">{valueText}</a>"},
-				"localStatus"	:{"title":"İşlem", "type":"html", "html":"<a class=\"badge-status status-{localStatus} \" href=\"javascript:popupCenter('#/despatch/outbox/status/{_id}?view=plain','İşlem Durumları','900','600')\">{localStatus}</a>"},
-				"receiptAdvice.receiptStatus"	:{"title":"Teslim Durumu", "type":"lookup", "staticValues":"receiptStatusTypes"}
+				"despatchStatus"	:{"title":"GİB Status", "type":"lookup", "staticValues":"despatchStatusTypes","html":"<a class=\"badge-status status-{despatchStatus.toLowerCase()} \" href=\"javascript:popupCenter('#/despatch/outbox/status/{_id}?view=plain','İşlem Durumları','900','600')\">{valueText}</a>"},
+				"localStatus"	:{"title":"İşlem",  "type":"lookup", "staticValues":"localStatusTypes", "html":"<a class=\"badge-status status-{localStatus} \" href=\"javascript:popupCenter('#/despatch/outbox/status/{_id}?view=plain','İşlem Durumları','900','600')\">{valueText}</a>"},
+				"receiptAdvice.receiptStatus"	:{"title":"Teslim", "type":"lookup", "staticValues":"receiptStatusTypes"}
 			},
 			"options": {
 				"selection": true,
@@ -121,22 +121,18 @@
 							"title":"Adres bilgisi",
 							"collapsed":true,
 							"fields":{
+								"despatchSupplierParty.party.postalAddress.citySubdivisionName.value":{"title":"Mahalle/Semt", "type":"string","col":3},
 								"despatchSupplierParty.party.postalAddress.streetName.value":{"title":"Cadde/Sokak", "type":"string", "col":4},
 								"despatchSupplierParty.party.postalAddress.buildingNumber.value":{"title":"Cadde Sokak Kapı No", "type":"string", "col":2},
 								"despatchSupplierParty.party.postalAddress.buildingName.value":{"title":"Bina/Site adı", "type":"string", "col":2},
 								"despatchSupplierParty.party.postalAddress.blockName.value":{"title":"Blok adı", "type":"string", "col":2},
 								"despatchSupplierParty.party.postalAddress.room.value":{"title":"Daire", "type":"string", "col":2},
-								"despatchSupplierParty.party.postalAddress.citySubdivisionName.value":{"title":"Mahalle/Semt", "type":"string","col":3},
 								"despatchSupplierParty.party.postalAddress.district.value":{"title":"İlçe", "type":"string","col":3},
 								"despatchSupplierParty.party.postalAddress.cityName.value":{"title":"Şehir", "type":"string","col":3},
 								"despatchSupplierParty.party.postalAddress.region.value":{"title":"Bölge", "type":"string","col":3},
 								"despatchSupplierParty.party.postalAddress.country.identificationCode.value":{
 									"title":"Ülke Kodu", "type":"lookup", "staticValues":"countryList","col":2,
 									"lookupTextField":"despatchSupplierParty.party.postalAddress.country.name.value",
-									"onchange":"countryCode_changed('despatchSupplierParty.party.')"
-								},
-								"despatchSupplierParty.party.postalAddress.country.identificationCode.value":{
-									"title":"Ülke Kodu", "type":"lookup", "staticValues":"countryList","col":2,
 									"onchange":"countryCode_changed('despatchSupplierParty.party.')"
 								},
 								"despatchSupplierParty.party.postalAddress.country.name.value":{"title":"Ülke İsmi", "type":"string","col":2 ,"readonly":true},

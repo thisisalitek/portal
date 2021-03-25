@@ -157,15 +157,17 @@ footer.footer {
 	text-shadow: 0px 0px 3px rgba(0, 0, 0, 1);
 	/*white-space: nowrap;*/
 	height: 1.6rem;
+	white-space: nowrap !important;
 }
 
-.badge-status a{
+.badge-status, .badge-status a{
 	color:#fff;
 }
 
-.badge-status a:hover{
+.badge-status:hover, .badge-status a:hover{
 	text-decoration: none;
 }
+
 
 .status-temel {
 	color:#fff;
@@ -287,6 +289,16 @@ footer.footer {
 }
 
 .status-default {
+	color:#fff;
+	background-color: #55859f;
+}
+
+.status-transferring {
+	color:#fff;
+	background-color: #444444;
+}
+
+.status-transferred {
 	color:#fff;
 	background-color: #55859f;
 }

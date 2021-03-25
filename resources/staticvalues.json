@@ -112,6 +112,13 @@
 		"SEVK": "Sevk",
 		"MATBUDAN": "Matbudan"
 	},
+	"localStatusTypes": {
+		"": "",
+		"pending": "sırada",
+		"transferring": "aktarılıyor",
+		"transferred": "aktarıldı",
+		"error": "hata"
+	},
 	"despatchStatusTypes": {
 		"Draft": "Taslak",
 		"Canceled": "İptal Edildi",

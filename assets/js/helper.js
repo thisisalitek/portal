@@ -737,7 +737,7 @@ function cariKart_changed(prefix){
 	"postalAddress.region.value",
 	"postalAddress.country.identificationCode.value",
 	"postalAddress.country.name.value",
-	"postalAddress.postbox.value",
+	"postalAddress.postalZone.value",
 	"contact.telephone.value",
 	"contact.telefax.value",
 	"contact.electronicMail.value",
@@ -748,6 +748,8 @@ function cariKart_changed(prefix){
 	if(cari==undefined)
 		return
 	var obj=JSON.parse(decodeURIComponent(cari))
+
+	console.log(`cariKart_changed obj:`,obj)
 	fieldList.forEach((e)=>{
 		var componentFieldName=`${prefix}.party.${e}`
 
@@ -1361,8 +1363,8 @@ function runTimer(selector,prefix=''){
 }
 
 function runFilter(selector,prefix=''){
-	var h=getHashObject()
-	var obj=getDivData(selector,prefix)
+	let h=getHashObject()
+	let obj=getDivData(selector,prefix)
 	if(obj){
 		obj=objectToListObject(obj)
 	}
@@ -1380,9 +1382,25 @@ function runFilter(selector,prefix=''){
 	if(h.query.page){
 		h.query.page=1
 	}
-	if(JSON.stringify(h.query)==JSON.stringify(hashObj.query)){
+
+	let bFarkli=false
+	if(Object.keys(h.query).length!=Object.keys(hashObj.query).length){
+		bFarkli=true
+	}else{
+		Object.keys(h.query).forEach((key)=>{
+			if(h.query[key]!=hashObj.query[key]){
+				bFarkli=true
+				return
+			}
+		})
+	}
+
+
+	if(!bFarkli){
+		console.log(`query bolumu esit:`)
 		window.onhashchange()
 	}else{
+		console.log(`query bolumu esit degil:`)
 		setHashObject(h)
 	}
 }
