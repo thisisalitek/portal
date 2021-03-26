@@ -410,6 +410,11 @@
 
 	function grid(item,bRoot,insideOfModal){
 
+		// if(item.options){
+		// 	if(item.options.root!=undefined)
+		// 		bRoot=item.options.root
+		// }
+		
 		var s=``
 		item=gridDefaults(item,bRoot,insideOfModal)
 		if(insideOfModal==false){
@@ -923,6 +928,9 @@
 							case 'datetime':
 							td=(new Date(itemValue)).yyyymmddhhmmss()
 							break
+							case 'fromnow':
+							td=moment((new Date(itemValue))).fromNow()
+							break
 							case 'boolean':
 							tdClass=field.class || 'text-center'
 							itemValue=(itemValue || '').toString()==='true'?true:false
@@ -1317,8 +1325,10 @@ function gridDefaults(item,bRoot,insideOfModal){
 		item.id=`rootGrid${rootGridId}`
 	}
 	item=gridButtonOptions(item,bRoot,insideOfModal)
+	let optShow={}
+
 	if(!bRoot){
-		item.options.show={
+		optShow={
 			filter:false,
 			pageSize:false,
 			pageCount:false,
@@ -1327,7 +1337,7 @@ function gridDefaults(item,bRoot,insideOfModal){
 			footer:false
 		}
 	}else{
-		item.options.show={
+		optShow={
 			filter:true,
 			pageSize:true,
 			pageCount:true,
@@ -1336,10 +1346,13 @@ function gridDefaults(item,bRoot,insideOfModal){
 			footer:true
 		}
 	}
-	if(item.options.show.filter || item.options.show.pageSize || item.options.show.pageCount || item.options.show.pagerButtons){
-		item.options.show.infoRow=true
-	}else{
-		item.options.show.infoRow=false
+	item.options.show=Object.assign({},optShow,item.options.show)
+	if(item.options.show.infoRow==undefined){
+		if(item.options.show.filter || item.options.show.pageSize || item.options.show.pageCount || item.options.show.pagerButtons){
+			item.options.show.infoRow=true
+		}else{
+			item.options.show.infoRow=false
+		}
 	}
 	item.options.show.filterRow=item.options.filter || false
 	if(bRoot===false)
@@ -1715,13 +1728,13 @@ function dateRangeBox(item){
 		$('#${item.id} #cbDate').val('')
 		$('#${item.id} #date1').val(hashObj.query.date1)
 		$('#${item.id} #date2').val(hashObj.query.date2)
-		console.log('burasi hashObj.query.cbDate:',hashObj.query.cbDate)
+		
 		pageSettings.setItem('cbDate','')
 
 	}else if(pageSettings.getItem('cbDate')){
 		$('#${item.id} #cbDate').val(pageSettings.getItem('cbDate'))
 		cbDate_onchange()
-		
+
 	}else{
 		if($('#${item.id} #cbDate').val()==''){
 			$('#${item.id} #cbDate').val('thisMonth')

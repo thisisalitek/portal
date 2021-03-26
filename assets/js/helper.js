@@ -489,7 +489,7 @@ function remoteLookupAutocomplete(locals){
 
 
 function cboEasyDateChange(value){
-	
+
 	var date1=new Date()
 	var date2=new Date()
 	date1.setHours(0, 0, 0, 0)
@@ -568,7 +568,7 @@ function replaceUrlCurlyBracket(url,item){
 				value=value.toUpperCase()
 			}
 		}
-	
+		
 		url=url.replaceAll(`{${e}}`,value)
 	})
 
@@ -697,8 +697,19 @@ function getRemoteData(item,cb){
 		type:item.dataSource.method || 'GET',
 		dataType: 'json',
 		success: function(result) {
-			if(result.success){
-				
+			
+			if(result.success==undefined){
+				data.value=result
+				if(Array.isArray(result)){
+					data.paging={
+						page:1,
+						pageCount:1,
+						pageSize:10,
+						recordCount:result.length
+					}
+				}
+				cb(null,data)
+			}else if(result.success){
 				if(result.data.docs){
 					data.value=result.data.docs
 					data.paging={
@@ -2101,24 +2112,8 @@ function notifyMe(text,status) {
 		message: text,
 		status: status || 'orange',
 		dismissible:true,
-		timeout:3000,
-		// actions: [{
-		// 	text: "Click Me!",
-		// 	function: function(){
-		// 		alert("A-C-T-I-O-N");
-		// 	}
-		// }]
+		timeout:3000
 	})
-  // if (!("Notification" in window)) {
-  //   alert("This browser does not support desktop notification");
-  // } else if (Notification.permission === "granted") {
-  //   var notification = new Notification(text)
-  // }else if (Notification.permission !== "denied") {
-  //   Notification.requestPermission().then(function (permission) {
-  //     if (permission === "granted") {
-  //       var notification = new Notification(text)
-  //     }
-  //   })
-  // }
+	
 }
 

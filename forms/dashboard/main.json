@@ -1,29 +1,56 @@
 {
 	"index":[
 		{
-			"type": "group",
+			"type":"label",
+			"title":"Portal güncellemeleri",
+			"noGroup":true,
+			"class":"text-success bold"
+		},
+		{
+			"type": "grid",
 			"fields":{
-				"partyName.name.value": {"title":"Müşteri adı", "type":"string", "filterField":"partyName"},
-				"postalAddress.cityName.value": {"title":"Şehir", "type":"string", "filterField":"cityName"},
-				"postalAddress.district.value": {"title":"İlçe", "type":"string", "filterField":"district"},
-				"passive": {"title":"Pasif?", "type":"boolean"}
+				"committer.login":{"title":"Düzenleyen","type":"string", "width":"100px"},
+				"commit.committer.date":{"title":"Tarih","type":"fromNow", "width":"150px"},
+				"commit.message":{"title":"Açıklama","type":"string"}
 			},
-			"options": {
-				"selection": true,
-				"filter": true,
-				"buttons": {
-					"add": true,
-					"edit": true,
-					"delete": true,
-					"view": false,
-					"print": false,
-					"copy": true
-				}				
+			"options":{
+				"filter":false,
+				"show":{
+					"infoRow":false,
+					"header":true
+				}
 			},
 			"dataSource": {
 				"type":"remote",
 				"method":"GET",
-				"url":"/dbapi/customers"
+				"url":"https://api.github.com/repos/ganygo/portal/commits?page=1&per_page=5"
+			}
+		},
+		{
+			"type":"label",
+			"title":"REST API güncellemeleri",
+			"noGroup":true,
+			"class":"text-primary bold mt-4"
+		},
+		{
+
+			"type": "grid",
+			"fields":{
+				"committer.login":{"title":"Düzenleyen","type":"string", "width":"100px"},
+				"commit.committer.date":{"title":"Tarih","type":"fromNow", "width":"150px"},
+				"commit.message":{"title":"Açıklama","type":"string"}
+			},
+			"options":{
+				"filter":false,
+				"show":{
+					"infoRow":false,
+					"header":true
+				}
+			},
+			"dataSource": {
+				"type":"remote",
+				"method":"GET",
+				"url":"https://api.github.com/repos/ganygo/api/commits?page=1&per_page=5"
 			}
 		}
 	]
