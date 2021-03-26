@@ -91,7 +91,21 @@
 				if(index>=sayfalar.length)
 					return cb()
 
+				if(sayfalar[index].type=='filter' && (hashObj.query.cbDate || '')==''){
+					if(pageSettings.getItem('cbDate')){
+						var obj=cboEasyDateChange(pageSettings.getItem('cbDate'))
+
+						h=getHashObject()
+						h.query.cbDate=pageSettings.getItem('cbDate')
+						h.query.date1=obj.date1
+						h.query.date2=obj.date2
+						setHashObject(h)
+						return cb()
+					}
+				}
+
 				var sayfa=clone(sayfalar[index])
+
 				getRemoteData(sayfa,(err,data)=>{
 					if(!err){
 						var fieldList=collectFieldList(sayfa)
@@ -169,11 +183,7 @@
 					mainCtrl.innerHTML=s
 					if(err.code=='SESSION_NOT_FOUND'){
 						window.location.href=`/changedb?sid=${global.sessionId}&r=${window.location.href}`
-						// confirmX(`Oturum sonlandırılmış. Tekrar giriş yapalım mı?`,(answer)=>{
-						// 	if(answer){
-						// 		window.location.href=`/login?r=${window.location.href}`
-						// 	}
-						// })
+						
 					}
 				}
 				script=''
@@ -1676,6 +1686,7 @@ function dateRangeBox(item){
 	<option value="today">Bugün</option>
 	<option value="thisWeek">Bu Hafta</option>
 	<option value="thisMonth">Bu Ay</option>
+	<option value="lastMonth">Geçen Ay</option>
 	<option value="last1Week">Son 1 Hafta</option>
 	<option value="last1Month">Son 1 Ay</option>
 	<option value="last3Months">Son 3 Ay</option>
@@ -1691,6 +1702,7 @@ function dateRangeBox(item){
 	
 	$('#${item.id} #cbDate').on('change',cbDate_onchange)
 
+
 	if((hashObj.query.cbDate || '')!='' ){
 		$('#${item.id} #cbDate').val(hashObj.query.cbDate)
 		if(hashObj.query.date1 || ''!=''){
@@ -1699,16 +1711,26 @@ function dateRangeBox(item){
 		if(hashObj.query.date2 || ''!=''){
 			$('#${item.id} #date2').val(hashObj.query.date2)
 		}
+	}else if((hashObj.query.cbDate || '')=='' && hashObj.query.date1 && hashObj.query.date2){
+		$('#${item.id} #cbDate').val('')
+		$('#${item.id} #date1').val(hashObj.query.date1)
+		$('#${item.id} #date2').val(hashObj.query.date2)
+		console.log('burasi hashObj.query.cbDate:',hashObj.query.cbDate)
+		pageSettings.setItem('cbDate','')
+
 	}else if(pageSettings.getItem('cbDate')){
 		$('#${item.id} #cbDate').val(pageSettings.getItem('cbDate'))
 		cbDate_onchange()
+		
+	}else{
+		if($('#${item.id} #cbDate').val()==''){
+			$('#${item.id} #cbDate').val('thisMonth')
+		}
 	}
 
-	if($('#${item.id} #cbDate').val()==''){
-		$('#${item.id} #cbDate').val('thisMonth')
-	}
 
-	
+
+
 	function cbDate_onchange(){
 		var obj=cboEasyDateChange($('#${item.id} #cbDate').val())
 		$('#${item.id} #date1').val(obj.date1)

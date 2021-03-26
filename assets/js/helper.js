@@ -489,7 +489,7 @@ function remoteLookupAutocomplete(locals){
 
 
 function cboEasyDateChange(value){
-
+	
 	var date1=new Date()
 	var date2=new Date()
 	date1.setHours(0, 0, 0, 0)
@@ -507,6 +507,10 @@ function cboEasyDateChange(value){
 		case 'thisMonth': 
 		date1=date1.addDays(-1 * (date1.getDate()-1))
 		date2=date2.lastThisMonth()
+		break
+		case 'lastMonth': 
+		date1=new Date((new Date(date1.setMonth(date1.getMonth()-1))).setDate(1))
+		date2=date1.lastThisMonth()
 		break
 		case 'last1Week':
 		date1=date1.addDays(-7)
@@ -1397,10 +1401,8 @@ function runFilter(selector,prefix=''){
 
 
 	if(!bFarkli){
-		console.log(`query bolumu esit:`)
 		window.onhashchange()
 	}else{
-		console.log(`query bolumu esit degil:`)
 		setHashObject(h)
 	}
 }
@@ -1835,11 +1837,14 @@ function runProgramAjax(data){
 						return
 					}else if(programType=='connector-exporter'){
 						alertX(result.data,(answer)=>{
+							
 							window.onhashchange()
+							
 						})
 					}else{
 						alertX(result.data,(answer)=>{
 							window.onhashchange()
+							
 						})
 					}
 				}
@@ -1875,7 +1880,9 @@ function runPanelButtons(url,method){
 		success:function(result){
 			if(result.success){
 				alertX(result.data,()=>{
+					console.log(`runPanelButtons list:`,list)
 					window.onhashchange()
+					
 				})
 				
 			}else{
