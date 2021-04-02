@@ -177,69 +177,6 @@ function modalFormOptions(){
 	window.location.href=s
 }
 
-function modalFormOptions111(){
-	$("#gridPrograms tr").remove()
-	$('#modalFormOptions .modal-title').html(`<i class="fas fa-cogs"></i> Form Options: <span class="text-primary bold">${hashObj.title}</span>`)
-	$.ajax({
-		url:`/dbapi/programs?passive=false`,
-		type:'GET',
-		dataType: 'json',
-		success: function(result) {
-			if(result.success){
-				$.ajax({
-					url:`/dbapi/settings`,
-					type:'GET',
-					dataType: 'json',
-					success: function(result2) {
-						var secilmisOlanlar=[]
-						
-						
-						if(result2.success){
-							if(result2.data.settings){
-								if(result2.data.settings.page){
-									if(result2.data.settings.page[windowPathToFieldName()]){
-										if(result2.data.settings.page[windowPathToFieldName()].programs){
-											secilmisOlanlar=result2.data.settings.page[windowPathToFieldName()].programs
-										}
-									}
-								}
-							}
-						}
-						
-						var lineGrid=document.getElementById('gridPrograms')
-						result.data.docs.forEach((prg,index)=>{
-
-							var newRow=lineGrid.insertRow(lineGrid.rows.length)
-							var bChecked=false
-
-							secilmisOlanlar.forEach((e)=>{
-								if(e._id.toString()==prg._id.toString()){
-									bChecked=true
-									return
-								}
-							})
-							
-							if(bChecked){
-								newRow.insertCell(0).innerHTML=`<input type="checkbox" class="programRow" name="programRow[${index}]" checked="true" value="${encodeURIComponent2(JSON.stringify(prg))}">`
-							}else{
-								newRow.insertCell(0).innerHTML=`<input type="checkbox" class="programRow" name="programRow[${index}]" value="${encodeURIComponent2(JSON.stringify(prg))}">`
-							}
-							
-							
-							newRow.insertCell(1).innerHTML=prg.name
-							newRow.insertCell(2).innerHTML=prg.type
-						})
-						$('#modalFormOptions').modal('show')
-					}
-				})
-			}
-		},
-		error:function(err){
-			showError(err)
-		}
-	})
-}
-
 function modalFormOptions_OK(){
 	var data={page:{}}
 	data.page[windowPathToFieldName()]={programs:[null]}

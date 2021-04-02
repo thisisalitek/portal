@@ -589,9 +589,9 @@ function replaceUrlCurlyBracket(url,item){
 }
 
 
-function getPropertyByKeyPath(targetObj, keyPath) {
+function getPropertyByKeyPath(targetObj, keyPath, defaultValue) {
 	if(targetObj==undefined || targetObj==null || !keyPath)
-		return targetObj
+		return defaultPropertyValue(targetObj,defaultValue)
 
 	if(keyPath.substr(0,1)=='/')
 		keyPath=keyPath.substr(1)
@@ -601,15 +601,37 @@ function getPropertyByKeyPath(targetObj, keyPath) {
 
 	var keys = keyPath.split('.')
 	if(keys.length == 0) 
-		return undefined
+		return defaultPropertyValue(undefined,defaultValue)
 	keys = keys.reverse()
 	var subObject = targetObj
 	while(keys.length) {
 		var k = keys.pop()
 		if(typeof subObject[k]=='undefined' || subObject[k]==null) {
-			return undefined
+			return defaultPropertyValue(undefined,defaultValue)
 		} else {
 			subObject = subObject[k]
+		}
+	}
+
+
+	
+
+	return defaultPropertyValue(subObject,defaultValue)
+}
+
+function defaultPropertyValue(subObject,defaultValue){
+	if(!subObject && defaultValue!=undefined){
+		if(typeof defaultValue=='string'){
+			let s1=defaultValue.indexOf('${')
+			let s2=defaultValue.indexOf('}',s1)
+			if(s1>-1 && s2>-1){
+				let s=eval('`'+defaultValue + '`')
+				subObject=s
+			}else{
+				subObject=defaultValue
+			}
+		}else{
+			subObject=defaultValue
 		}
 	}
 	return subObject
@@ -764,7 +786,7 @@ function cariKart_changed(prefix){
 		return
 	var obj=JSON.parse(decodeURIComponent(cari))
 
-	console.log(`cariKart_changed obj:`,obj)
+	
 	fieldList.forEach((e)=>{
 		var componentFieldName=`${prefix}.party.${e}`
 

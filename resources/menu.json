@@ -75,7 +75,7 @@
 		"nodes":[
 			{"module":"accounting.accounts", "text":"Hesap planı", "path":"/accounting/account-codes", "icon":"fas fa-cube"},
 			{"module":"accounting.accountGroups", "text":"Hesap grupları", "path":"/accounting/account-groups", "icon":"fas fa-hands"},
-			{"module":"accounting.entry", "text":"Muhasebe fişleri", "path":"/general/closed-module", "icon":"fas fa-parachute-box"},
+			{"module":"accounting.entry", "text":"Muhasebe fişleri", "path":"/accounting/accounting-entries", "icon":"fas fa-parachute-box"},
 			{"module":"accounting.flow", "text":"Hesap hareketleri", "path":"/general/closed-module", "icon":"fas fa-table"},
 			{"module":"accounting.ledger", "text":"Defter",	"path":"/general/closed-module", "icon":"fas fa-table"}
 		]

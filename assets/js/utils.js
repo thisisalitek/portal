@@ -37,21 +37,20 @@ Date.prototype.hhmm = function () {
 
 Date.prototype.addDays = function(days)
 {
-	var dat = new Date(this.valueOf());
-	dat.setDate(dat.getDate() + days);
+	var dat = new Date(this.valueOf())
+	dat.setDate(dat.getDate() + days)
 	return dat
 }
 
 Date.prototype.lastThisMonth = function()
 {
-	var dat = new Date(this.valueOf());
-	dat=new Date((new Date(dat.setMonth(dat.getMonth()+1))).setDate(0))
+	var dat = new Date(this.valueOf())
+	dat=new Date(dat.getFullYear(),dat.getMonth()+1,0)
 	return dat
 }
 
-
 function clone(obj){
-	return JSON.parse(JSON.stringify(obj));
+	return JSON.parse(JSON.stringify(obj))
 }
 
 

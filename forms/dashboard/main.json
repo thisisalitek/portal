@@ -52,6 +52,60 @@
 				"method":"GET",
 				"url":"https://api.github.com/repos/ganygo/api/commits?page=1&per_page=5"
 			}
+		},
+		{
+			"type":"label",
+			"title":"Yazarkasa servis güncellemeleri",
+			"noGroup":true,
+			"class":"text-success bold mt-4"
+		},
+		{
+
+			"type": "grid",
+			"fields":{
+				"committer.login":{"title":"Düzenleyen","type":"string", "width":"100px"},
+				"commit.committer.date":{"title":"Tarih","type":"fromNow", "width":"150px"},
+				"commit.message":{"title":"Açıklama","type":"string"}
+			},
+			"options":{
+				"filter":false,
+				"show":{
+					"infoRow":false,
+					"header":true
+				}
+			},
+			"dataSource": {
+				"type":"remote",
+				"method":"GET",
+				"url":"https://api.github.com/repos/ganygo/posDevice/commits?page=1&per_page=5"
+			}
+		},
+		{
+			"type":"label",
+			"title":"E-Integration servis güncellemeleri",
+			"noGroup":true,
+			"class":"text-primary bold mt-4"
+		},
+		{
+
+			"type": "grid",
+			"fields":{
+				"committer.login":{"title":"Düzenleyen","type":"string", "width":"100px"},
+				"commit.committer.date":{"title":"Tarih","type":"fromNow", "width":"150px"},
+				"commit.message":{"title":"Açıklama","type":"string"}
+			},
+			"options":{
+				"filter":false,
+				"show":{
+					"infoRow":false,
+					"header":true
+				}
+			},
+			"dataSource": {
+				"type":"remote",
+				"method":"GET",
+				"url":"https://api.github.com/repos/ganygo/eIntegration/commits?page=1&per_page=5"
+			}
 		}
 	]
 }

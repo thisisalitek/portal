@@ -131,7 +131,10 @@ exports.downloadFile=(endpoint,req, res, params, callback)=>{
 			});
 
 			request.on('error', (err) => {
-				fs.unlinkSync(tmpFile)
+				if(fs.existsSync(tmpFile)){
+					fs.unlinkSync(tmpFile)
+				}
+				
 
 				return callback(err)
 			});

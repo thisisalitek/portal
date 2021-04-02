@@ -1060,5 +1060,20 @@
 		"printForm": "Form Yazdırma",
 		"printList": "Liste Yazdırma",
 		"xslt": "Xslt Tasarımı"
-	}
+	},
+	"monthList":{
+		"1":"Ocak",
+		"2":"Şubat",
+		"3":"Mart",
+		"4":"Nisan",
+		"5":"Mayıs",
+		"6":"Haziran",
+		"7":"Temmuz",
+		"8":"Ağustos",
+		"9":"Eylül",
+		"10":"Ekim",
+		"11":"Kasım",
+		"12":"Aralık"
+	},
+	"yearList":[2019,2020,2021,2022,2023,2024,2025,2026,2027,2028,2029]
 }

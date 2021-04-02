@@ -1,0 +1,340 @@
+{
+	"index":
+	[
+		{
+			"type":"filter",
+			"fields" :{
+				"year" :{"title":"Yıl", "type":"lookup", "col":2 ,"staticValues":"yearList","value":"${(new Date()).getFullYear()}", "onchange":"yearPeriod_change()"},
+				"period" :{"title":"Dönem", "type":"lookup", "col":2, "staticValues":"monthList","value":"${(new Date()).getMonth()+1}", "onchange":"yearPeriod_change()"},
+				"date1":{"title":"Tarih 1" , "type":"date", "col":2, "value":"${(new Date((new Date()).setDate(1))).yyyymmdd()}"},
+				"date2":{"title":"Tarih 2" , "type":"date", "col":2,"value":"${(new Date()).lastThisMonth().yyyymmdd()}"}
+			},
+			"script":[
+				"function yearPeriod_change(){",
+				"let yil=$('#year').val()",
+				"let period=$('#period').val()",
+				"if(yil!='' && period!=''){",
+				"let tarih1=(new Date(Number(yil),Number(period)-1,1)).yyyymmdd()",
+				"let tarih2=(new Date(Number(yil),Number(period)-1,1)).lastThisMonth().yyyymmdd()",
+				"$('#date1').val(tarih1)",
+				"$('#date2').val(tarih2)",
+				"",
+				"}",
+				"}"
+			]
+		},
+		{
+			"type": "grid",
+			"fields": {
+				"documentDate" :{"title":"Belge Tarih", "type":"date", "filter":false},
+				"documentNumber" :{"title":"Belge No", "type":"string"},
+				"totalDebit" :{"title":"T.Borç", "type":"money"},
+				"totalCredit" :{"title":"T.Alacak", "type":"money"},
+				"journalNumber" :{"title":"Yev.No", "type":"number"}
+			},
+			"options": {
+				"selection": true,
+				"filter": true,
+				"buttons": {
+					"add": true,
+					"edit": true,
+					"delete": true,
+					"view": false,
+					"print": true,
+					"copy": true
+				}
+			},
+			"dataSource": {
+				"type":"remote",
+				"method":"GET",
+				"url":"/dbapi/accounting-entries",
+				"deleteUrl":"/dbapi/accounting-entries",
+				"copyUrl":"/dbapi/accounting-entries/copy",
+				"printUrl":"/dbapi/accounting-entries/print"
+			},
+			"panelButtons":{}
+		}
+	],
+	"form": [
+		{
+			"type":"form",
+			"fields" :{
+				"baslik":{
+					"title":"Belge Bilgileri",
+					"fields":{
+						"eIntegrator" :{"title":"Entegratör", "type":"remoteLookup", 
+							"dataSource" :{
+								"type":"remote",
+								"method":"GET",
+								"url":"/dbapi/integrators",
+								"label":"{name}"
+							},
+							"col":"col-sm-6 col-md-3",
+							"lastRecord":true
+						},
+						"ID.value" :{"title":"Belge No(Boş ise otomatik)","type":"string" ,"col":"col-sm-6 col-md-3"},
+						"uuid.value" :{"title":"ETTN(uuid)","type":"string", "readonly":true,"col":"col-sm-6 col-md-3"},
+						"location" :{"title":"Lokasyon", "type":"remoteLookup", 
+							"dataSource" :{
+								"type":"remote",
+								"method":"GET",
+								"url":"/dbapi/locations",
+								"label":"{name}"
+							},
+							"col":"col-sm-6 col-md-3",
+							"lastRecord":true
+						},
+						"divsor1" :{"type":"w-100"},
+						"issueDate.value" :{"title":"Tarih","type":"date","col":3},
+						"issueTime.value" :{"title":"Saat","type":"time","col":3},
+						"profileId.value" :{"title":"Senaryo","type":"lookup", "staticValues":"despatchProfileIdList","col":3,"lastRecord":true, "onchange":"calistir(this.value)"},
+						"despatchAdviceTypeCode.value" :{"title":"Tipi","type":"lookup", "staticValues":"despatchAdviceTypeCodeList","lastRecord":true, "col":3},
+						"localDocumentId" :{"title":"Yerel Belge No","type":"string","col":3}
+					}
+				},
+				"gonderi":{
+					"title":"Gönderi Bilgileri",
+					"collapsed":true,
+					"fields":{
+						"shipment.shipmentStage.0.driverPerson.0.firstName.value":{"title":"Sürücü Adı", "type":"string", "col":3},
+						"shipment.shipmentStage.0.driverPerson.0.familyName.value":{"title":"Sürücü Soyadı", "type":"string", "col":3},
+						"shipment.shipmentStage.0.driverPerson.0.nationalityId.value":{"title":"Sürü TCKN", "type":"string", "col":3},
+						"shipment.shipmentStage.0.transportMeans.roadTransport.licensePlateId.value":{"title":"Araç Plakası", "type":"string", "col":3}
+					}
+				},
+				"cari":{
+					"title":"Müşteri Bilgileri",
+					"collapsed":false,
+					"fields":{
+						"deliveryCustomerParty.party._id":{"title":"Şirket/Firma", "type":"remoteLookup", "col":6,
+							"dataSource":{
+								"type":"remote",
+								"method":"GET",
+								"url":"/dbapi/customers",
+								"label":"{partyName.name.value}"
+							},
+							"lookupTextField":"deliveryCustomerParty.party.partyName.name.value",
+							"onchange":"cariKart_changed('deliveryCustomerParty')"
+						},
+						"deliveryCustomerParty.party.person.firstName.value":{"title":"Kişi Adı", "type":"string", "col":3},
+						"deliveryCustomerParty.party.person.familyName.value":{"title":"Kişi Soyadı", "type":"string", "col":3},
+						"deliveryCustomerParty.party.partyIdentification.0.ID.value":{"title":"Vergi No/Tckn", "type":"string", "col":4},
+						"deliveryCustomerParty.party.partyIdentification.0.ID.attr.schemeID":{"title":"Tür", "type":"lookup", "lookup":{"VKN":"VKN","TCKN":"TCKN"}, "col":4},
+						"deliveryCustomerParty.party.partyTaxScheme.taxScheme.name.value":{"title":"Vergi Dairesi", "type":"string", "col":4},
+						"adresBilgileri":{
+							"title":"Adres bilgisi",
+							"collapsed":true,
+							"fields":{
+								"deliveryCustomerParty.party.postalAddress.citySubdivisionName.value":{"title":"Mahalle/Semt", "type":"string", "required":true,"col":3},
+								"deliveryCustomerParty.party.postalAddress.streetName.value":{"title":"Cadde/Sokak", "type":"string", "required":true, "col":4},
+								"deliveryCustomerParty.party.postalAddress.buildingNumber.value":{"title":"Cadde Sokak Kapı No", "type":"string", "col":2},
+								"deliveryCustomerParty.party.postalAddress.buildingName.value":{"title":"Bina/Site adı", "type":"string", "col":2},
+								"deliveryCustomerParty.party.postalAddress.blockName.value":{"title":"Blok adı", "type":"string", "col":2},
+								"deliveryCustomerParty.party.postalAddress.room.value":{"title":"Daire", "type":"string", "col":2},
+								"deliveryCustomerParty.party.postalAddress.district.value":{"title":"İlçe", "type":"string","required":true,"col":3},
+								"deliveryCustomerParty.party.postalAddress.cityName.value":{"title":"Şehir", "type":"string", "required":true,"col":3},
+								"deliveryCustomerParty.party.postalAddress.region.value":{"title":"Bölge", "type":"string","col":3},
+								"deliveryCustomerParty.party.postalAddress.country.identificationCode.value":{
+									"title":"Ülke Kodu", "type":"lookup", "staticValues":"countryList","col":2, "required":true,
+									"onchange":"countryCode_changed('deliveryCustomerParty.party.')"
+								},
+								"deliveryCustomerParty.party.postalAddress.country.name.value":{"title":"Ülke İsmi", "type":"string","col":2 , "required":true,"readonly":true},
+								"deliveryCustomerParty.party.postalAddress.postalZone.value":{"title":"Posta Kodu", "type":"string", "required":true,"col":2}
+							}
+						},
+						"iletisim":{
+							"title":"İletişim",
+							"collapsed":true,
+							"fields":{
+								"deliveryCustomerParty.party.contact.telephone.value":{"title":"Telefon", "type":"string","col":2},
+								"deliveryCustomerParty.party.contact.telefax.value":{"title":"Fax", "type":"string","col":2},
+								"deliveryCustomerParty.party.contact.electronicMail.value":{"title":"E-Mail", "type":"string","col":4},
+								"deliveryCustomerParty.party.websiteURI.value":{"title":"Web sitesi", "type":"string","col":4}
+							}
+						}
+					}
+				},
+				"despatchLine" :{
+					"title":"Satırlar", 
+					"type":"grid",
+					"fields": {
+						"ID.value" :{"title":"#", "type":"identity","readonly":true, "width":"50px"},
+						"item._id" :{"title":"Mal/Hizmet", "type":"remoteLookup",
+							"dataSource":{
+								"type":"remote",
+								"method":"GET",
+								"url":"/dbapi/items?itemType=all",
+								"label":"{name.value} {description.value}"
+							},
+							"lookupTextField":"item.name.value",
+							"displayFormat":"{item.name.value} - {item.description.value}",
+							"required":true
+						},
+						"deliveredQuantity.value" :{"title":"Miktar", "type":"number","required":true},
+						"deliveredQuantity.attr.unitCode" :{"title":"Birim", "type":"lookup","staticValues":"unitCodeList","required":true},
+						"note.0.value" :{"title":"SatırNot 1", "type":"string"},
+						"note.1.value" :{"title":"SatırNot 2", "type":"string"},
+						"note.2.value" :{"title":"SatırNot 3", "type":"string"},
+						"note.3.value" :{"title":"SatırNot 4", "type":"string","visible":false},
+						"note.4.value" :{"title":"SatırNot 5", "type":"string","visible":false}
+					},
+					"modal":{
+						"tabs":[
+							{
+								"title":"Satir bilgileri",
+								"fields": {
+									"ID.value" :{"title":"#", "type":"identity","readonly":true, "width":"50px","col":1},
+									"item._id" :{"title":"Mal/Hizmet", "type":"remoteLookup",
+										"dataSource":{
+											"type":"remote",
+											"method":"GET",
+											"url":"/dbapi/items?itemType=all",
+											"label":"{name.value} {description.value}"
+										},
+										"lookupTextField":"item.name.value",
+										"required":true,"col":5
+									},
+									"deliveredQuantity.value" :{"title":"Miktar", "type":"number","required":true,"col":3},
+									"deliveredQuantity.attr.unitCode" :{"title":"Birim", "type":"lookup","staticValues":"unitCodeList","required":true,"col":3}
+								}
+							},
+							{
+								"title":"Diğer",
+								"fields": {
+									"note": {
+										"type":"grid",
+										"title":"Satır Notları",
+										"fields":{
+											"value":{"title":"Not", "type":"string"}
+										},
+										"options": {
+											"selection": false,
+											"filter": false,
+											"confirmBeforeRemove":false,
+											"buttons": {
+												"add": true,
+												"edit": true,
+												"delete": true,
+												"view": false,
+												"print": false,
+												"copy": false
+											}
+										}
+									}
+								}
+							}
+						]
+						
+					},
+					"options": {
+						"selection": false,
+						"filter": false,
+						"confirmBeforeRemove":false,
+						"buttons": {
+							"add": true,
+							"edit": true,
+							"delete": true,
+							"view": false,
+							"print": false,
+							"copy": false
+						}
+					},
+					"onchange":"toplamlariGuncelle(this)"
+				},
+				"group1":{
+					"title":"Toplamlar",
+					"fields":{
+						"toplamMiktar":{"title":"Toplam Miktar","type":"number", "readonly":true, "col":"col-sm-4 offset-sm-8 col-md-2 offset-md-10"}
+					}
+				},
+				"note":{
+					"title":"Notlar",
+					"type":"grid",
+					"fields":{
+						"value":{"title":"Not","type":"string"}
+					},
+					"options": {
+						"selection": false,
+						"filter": false,
+						"confirmBeforeRemove":false,
+						"buttons": {
+							"add": true,
+							"edit": true,
+							"delete": true,
+							"view": false,
+							"print": false,
+							"copy": false
+						}
+					}
+				}
+			},
+			"options": {
+				"mode": "general",
+				"isForm":true
+			},
+			"dataSource": {
+				"method":"GET",
+				"url":"/dbapi/despatch"
+			},
+			"script":[
+				"function toplamlariGuncelle(grid){",
+				"//console.log('toplamlari guncelle grid:',grid)",
+				"//return ",
+				"var toplamMiktar=0",
+				"grid.value.forEach((e)=>{",
+				"toplamMiktar+=Number(e.deliveredQuantity.value)",
+				"})",
+				"$('#toplamMiktar').val(toplamMiktar)",
+				"}"
+			]
+			
+		}
+	],
+"print": [
+	{
+		"type":"html",
+		"noGroup":true,
+		"title":"print data",
+		"dataSource": {
+			"method":"GET",
+			"url":"/dbapi/despatch/print"
+		}
+	}
+],
+"status": [
+	{
+		"type":"form",
+		"fields":{
+			"despatchStatus" :{"title":"Belge Durumu","type":"string","readonly":true},
+			"despatchErrors":{
+				"type":"grid",
+				"title":"Hatalar",
+				"fields":{
+					"_date":{"title":"Tarih Saat", "type":"datetime"},
+					"code":{"title":"Kod", "type":"string"},
+					"message":{"title":"Açıklama", "type":"string"}
+				}
+			},
+			"islem":{"title":"İşlem","type":"group","collapsed":true,
+				"fields":{
+					"localStatus" :{"title":"İşlem Durum","type":"string","readonly":true},
+					"localErrors":{
+						"type":"grid",
+						"title":"İşlem Hataları",
+						"fields":{
+							"_date":{"title":"Tarih Saat", "type":"datetime"},
+							"code":{"title":"Kod", "type":"string"},
+							"message":{"title":"Açıklama", "type":"string"}
+						}
+					}
+				}
+			}
+		},
+		"dataSource": {
+			"method":"GET",
+			"url":"/dbapi/despatch"
+		}
+	}
+]
+
+}

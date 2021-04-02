@@ -209,6 +209,8 @@
 			}
 		}
 
+		
+
 		if(item.fields){
 			Object.keys(item.fields).forEach((key)=>{
 				item.fields[key].field=key
@@ -236,84 +238,99 @@
 
 		switch((item.type || '').toLowerCase()){
 			case 'string' :
-			item.value=getPropertyByKeyPath(data.value,item.field) || item.value || ''
+			item.value=getPropertyByKeyPath(data.value,item.field, item.value) || ''
 			s+=textBox(item)
 			break
 			case 'number' :
-			item.value=getPropertyByKeyPath(data.value,item.field) || item.value || 0
+			item.value=getPropertyByKeyPath(data.value,item.field, item.value)
+			if(item.value==undefined){
+				item.value=0
+			}
 			s+=numberBox(item)
 			break
 
 			case 'money' :
 			if(item.readonly){
-				item.value=Number(getPropertyByKeyPath(data.value,item.field) || item.value || 0).formatMoney()
+				let buf=getPropertyByKeyPath(data.value,item.field, item.value)
+				if(buf==undefined){
+					buf=0
+				}
+				item.value=Number(buf).formatMoney()
 				item.class+=' text-right'
+
 				s+=textBox(item)
 			}else{
-				item.value=getPropertyByKeyPath(data.value,item.field) || item.value || 0
+				item.value=getPropertyByKeyPath(data.value,item.field, item.value)
+				if(item.value==undefined){
+					item.value=0
+				}
+
 				s+=numberBox(item)
 			}
 			break
 			case 'identity' :
 
-			item.value=getPropertyByKeyPath(data.value,item.field) || item.value || 0
+			item.value=getPropertyByKeyPath(data.value,item.field, item.value) || 0
 			item.readonly=true
 			s+=numberBox(item)
 			break
 			case 'date' : 
-			item.value=getPropertyByKeyPath(data.value,item.field) || item.value || ''
+			item.value=getPropertyByKeyPath(data.value,item.field, item.value) || ''
 			s+=dateBox(item)
 			break
 			case 'time' : 
-			item.value=getPropertyByKeyPath(data.value,item.field) || item.value || ''
+			item.value=getPropertyByKeyPath(data.value,item.field, item.value) || ''
 			s+=timeBox(item)
 			break
 			case 'filebase64image' :
 			case 'image' :
-			item.value=getPropertyByKeyPath(data.value,item.field) || item.value || ''
+			item.value=getPropertyByKeyPath(data.value,item.field, item.value) || ''
 			s+=imageBox(item)
 			break
 			case 'filebase64' :
 			case 'file' :
-			item.value=getPropertyByKeyPath(data.value,item.field) || item.value || ''
+			item.value=getPropertyByKeyPath(data.value,item.field, item.value) || ''
 			s+=fileBox(item)
 			break
 			case 'strings':
 			case 'textarea':
-			item.value=getPropertyByKeyPath(data.value,item.field) || item.value || ''
+			item.value=getPropertyByKeyPath(data.value,item.field, item.value) || ''
 			s+=textareaBox(item)
 			break
 			case 'code':
 			item.rows=item.rows || 40
 			item.encoding=item.encoding || 'base64'
-			item.value=getPropertyByKeyPath(data.value,item.field) || item.value || ''
+			item.value=getPropertyByKeyPath(data.value,item.field, item.value) || ''
 			s+=textareaBox(item)
 			break
 			case 'json':
 			item.rows=item.rows || 40
 			item.encoding=item.encoding || 'base64'
-			item.value=getPropertyByKeyPath(data.value,item.field) || item.value || ''
+			item.value=getPropertyByKeyPath(data.value,item.field, item.value) || ''
 			s+=textareaBox(item)
 			break
 			case 'button' : 
-			item.value=getPropertyByKeyPath(data.value,item.field) || item.value || ''
+			item.value=getPropertyByKeyPath(data.value,item.field, item.value) || ''
 			s+=button(item)
 			break
 			case 'lookup' :
-			item.value=getPropertyByKeyPath(data.value,item.field) || item.value || ''
+			
+			item.value=getPropertyByKeyPath(data.value,item.field, item.value) || ''
+
+
 			s+=lookup(item)
 			break
 			case 'html' :
-			item.value=getPropertyByKeyPath(data.value,item.field) || item.value || ''
+			item.value=getPropertyByKeyPath(data.value,item.field, item.value) || ''
 			s+=formHtml(item)
 			
 			break
 			case 'label' :
-			item.value=getPropertyByKeyPath(data.value,item.field) || item.value || ''
+			item.value=getPropertyByKeyPath(data.value,item.field, item.value) || ''
 			s+=label(item)
 			break
 			case 'remotelookup' : 
-			item.value=getPropertyByKeyPath(data.value,item.field) || item.value
+			item.value=getPropertyByKeyPath(data.value,item.field, item.value)
 			if(item.lookupTextField){
 				item.valueText=getPropertyByKeyPath(data.value,item.lookupTextField) || item.valueText || ''
 			}
@@ -321,7 +338,7 @@
 
 			break
 			case 'boolean' :
-			item.value=getPropertyByKeyPath(data.value,item.field) || item.value || ''
+			item.value=getPropertyByKeyPath(data.value,item.field, item.value) || ''
 			s+=checkBox(item)
 			break
 			case 'daterange' : 
@@ -339,7 +356,7 @@
 				item.paging=data.paging
 				s+=grid(item, bRoot,insideOfModal)
 			}else{
-				item.value=getPropertyByKeyPath(data.value,item.field)
+				item.value=getPropertyByKeyPath(data.value,item.field,item.value)
 				item.controls=grid(item, bRoot,insideOfModal)
 				s+=card(item)
 			}
@@ -349,10 +366,13 @@
 			if(item.fields){
 				item.controls=`<div id="filterForm" class="col-12 m-0 p-0"><div class="row m-0 p-0">`
 				Object.keys(item.fields).forEach((key)=>{
-					item.fields[key].value=hashObj.query[key] || ''
+					
+					item.fields[key].value=hashObj.query[key] || item.fields[key].value || ''
 					item.fields[key].showAll=true
 					item.fields[key].class='my-0'
+					
 					item.controls+=generateControls(item.fields[key],{value:{}},false,insideOfModal)
+					
 				})
 				item.controls+=`${filterFormButton('filterForm')}</div></div>`
 
@@ -397,7 +417,7 @@
 			break
 
 			default:
-			item.value=getPropertyByKeyPath(data.value,item.field) || item.value || ''
+			item.value=getPropertyByKeyPath(data.value,item.field, item.value) || ''
 			s+=textBox(item)
 			break
 		}
@@ -489,7 +509,6 @@
 		}
 
 		if(options.buttons.print[0]==true && options.buttons.print[1]==''){
-				// options.buttons.print[1]=`<a href="javascript:popupCenter('/haham?view=plain#${hashObj.path + '/print/{_id}'}','Yazdır','900','600')" class="btn btn-grid-row btn-info " title="Yazdır"><i class="fas fa-print"></i></a>`
 				var q2=clone(q)
 				q2['view']='print'
 				
@@ -497,7 +516,6 @@
 					if(hashObj.settings.print.form){
 						q2['designId']=hashObj.settings.print.form._id 
 					}
-					
 				}
 				
 				options.buttons.print[1]=`<a href="javascript:popupCenter('${menuLink(hashObj.path + '/print/{_id}',q2)}','Yazdır','900','600')" class="btn btn-grid-row btn-info " title="Yazdır"><i class="fas fa-print"></i></a>`
@@ -733,6 +751,7 @@
 
 			item.insideOfModal=insideOfModal
 			if(!item.value){
+				
 				if(queryValues){
 					item.value=hashObj.query[item.field] || ''
 				}else if(item.type=='date'){
@@ -740,9 +759,9 @@
 				}else if(item.type=='time'){
 					item.value=(new Date()).hhmmss()
 				}else if(item.lastRecord===true){
-					var lastRecord= pageSettings.getItem('lastRecord')
+					var lastRecord=pageSettings.getItem('lastRecord')
 					if(lastRecord){
-						item.value=getPropertyByKeyPath(lastRecord,item.field)
+						item.value=getPropertyByKeyPath(lastRecord,item.field,item.value)
 					}
 					
 				}
@@ -868,7 +887,7 @@
 							if(field.html && field.type!='lookup'){
 								itemValue=replaceUrlCurlyBracket(field.html,listItem) || ''
 							}else{
-								itemValue=getPropertyByKeyPath(listItem,key)
+								itemValue=getPropertyByKeyPath(listItem,key,itemValue)
 								if(itemValue==undefined){
 									itemValue=''
 									if(field.type=='number' || field.type=='money'){
@@ -1034,24 +1053,22 @@ s+=`</tr>`
 })
 }
 
-// if((insideOfModal || !item.modal)  && item.options.buttons.add[0] && !bRoot){
-	if(item.options.buttons.add[0] && !bRoot){
-		s+=`<tr id="${item.id}-row-editor">`
+if(item.options.buttons.add[0] && !bRoot){
+	s+=`<tr id="${item.id}-row-editor">`
 
-		Object.keys(fieldList).forEach((key)=>{
-			var field=fieldList[key]
-			var cls=''
-			field.field=`${item.parentField}.-1.${key}`
-			field.noGroup=true
-			field.id=generateFormId(field.field)
-			field.name=generateFormName(field.field)
-			field.value=undefined
-			delete field.value
-			field.valueText=undefined
-			delete field.valueText
+	Object.keys(fieldList).forEach((key)=>{
+		var field=fieldList[key]
+		var cls=''
+		field.field=`${item.parentField}.-1.${key}`
+		field.noGroup=true
+		field.id=generateFormId(field.field)
+		field.name=generateFormName(field.field)
+		field.value=undefined
+		delete field.value
+		field.valueText=undefined
+		delete field.valueText
 
-			if(field.type=='boolean'){
-			//cls+=' text-center'
+		if(field.type=='boolean'){
 			field.class='grid-checkbox'
 		}else if(field.type=='identity'){
 			field.value=nextIdentity
@@ -1063,28 +1080,28 @@ s+=`</tr>`
 
 		s+=td
 	})
-		s+=`<td class="text-center">
-		<a href="javascript:gridSatirOK('${item.id}','${item.id}-row-editor',-1,${insideOfModal})" class="btn btn-primary btn-grid-row" title="Tamam"><i class="fas fa-check"></i></a>
-		<a href="javascript:gridSatirVazgec('${item.id}','${item.id}-row-editor',-1,${insideOfModal}) "class="btn btn-dark btn-grid-row" title="Vazgeç"><i class="fas fa-reply"></i></a>
-		</td>`
-		s+=`</tr>`
+	s+=`<td class="text-center">
+	<a href="javascript:gridSatirOK('${item.id}','${item.id}-row-editor',-1,${insideOfModal})" class="btn btn-primary btn-grid-row" title="Tamam"><i class="fas fa-check"></i></a>
+	<a href="javascript:gridSatirVazgec('${item.id}','${item.id}-row-editor',-1,${insideOfModal}) "class="btn btn-dark btn-grid-row" title="Vazgeç"><i class="fas fa-reply"></i></a>
+	</td>`
+	s+=`</tr>`
 
 
 
-
-		script+=`
-		editRowCalculation('#${item.id}-row-editor','${item.parentField}.-1', ${JSON.stringify(fieldList)})
-
-		`
-	}
 
 	script+=`
-	refreshRemoteList(${JSON.stringify(remoteList)})
+	editRowCalculation('#${item.id}-row-editor','${item.parentField}.-1', ${JSON.stringify(fieldList)})
+
 	`
+}
+
+script+=`
+refreshRemoteList(${JSON.stringify(remoteList)})
+`
 
 
-	s+=`</tbody>`
-	return s
+s+=`</tbody>`
+return s
 }
 
 function buttonRowCell(listItem,rowIndex,item,bRoot){
@@ -1596,9 +1613,16 @@ function lookup(item){
 	var s=`<select type="text" class="form-control ${item.class || ''}" id="${item.id}" name="${item.name}" placeholder="${item.placeholder || item.title || item.label}" autocomplete="chrome-off" ${item.required?'required="required"':''} ${item.readonly==true?'disabled':''} onchange="${item.onchange || ''}">
 	<option value="" ${item.value==''?'selected':''}>${item.showAll===true?'*':'-- Seç --'}</option>`
 	if(item.lookup){
-		Object.keys(item.lookup).forEach((key)=>{
-			s+=`<option value="${key}" ${key===item.value?'selected':''}>${item.lookup[key]}</option>`
-		})
+		if(Array.isArray(item.lookup)){
+			item.lookup.forEach((e)=>{
+				s+=`<option value="${e}" ${e==item.value?'selected':''}>${e}</option>`
+			})
+		}else{
+			Object.keys(item.lookup).forEach((key)=>{
+				s+=`<option value="${key}" ${key==item.value?'selected':''}>${item.lookup[key]}</option>`
+			})
+		}
+		
 	}
 	s+=`</select>`
 	if(item.lookupTextField){
